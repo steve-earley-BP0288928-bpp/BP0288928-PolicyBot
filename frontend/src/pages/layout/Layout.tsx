@@ -9,9 +9,10 @@ const Layout = () => {
             <header className={styles.header} role={"banner"}>
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
-                        <h3 className={styles.headerTitle}>Chat LSE</h3>
+                        {/* <h3 className={styles.headerTitle}>Chat LSE</h3> */}
+                        <h3 className={styles.headerTitle}>Steve Earley - MSc Research Project</h3>
                     </Link>
-                    <h4 className={styles.headerRightText}>Llama + PostgreSQL</h4>
+                    {/* <h4 className={styles.headerRightText}>Llama + PostgreSQL</h4> */}
                 </div>
             </header>
 

@@ -2,5 +2,6 @@ import { Sparkle28Filled } from "@fluentui/react-icons";
 
 export const AnswerIcon = () => {
     // return <Sparkle28Filled primaryFill={"rgba(115, 118, 225, 1)"} aria-hidden="true" aria-label="Answer logo" />;
-    return <Sparkle28Filled primaryFill={"rgba(225, 115, 115, 1)"} aria-hidden="true" aria-label="Answer logo" />;
+    // return <Sparkle28Filled primaryFill={"rgba(225, 115, 115, 1)"} aria-hidden="true" aria-label="Answer logo" />;
+    return <Sparkle28Filled primaryFill={"rgba(52, 106, 207, 1)"} aria-hidden="true" aria-label="Answer logo" />;
 };

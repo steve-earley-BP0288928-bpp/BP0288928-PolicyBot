@@ -297,7 +297,8 @@ const Chat = () => {
                         className={styles.chatSettingsSeparator}
                         label="Retrieve this many search results:"
                         min={1}
-                        max={50}
+                        // max={50}
+                        max={10}
                         defaultValue={retrieveCount.toString()}
                         onChange={onRetrieveCountChange}
                     />

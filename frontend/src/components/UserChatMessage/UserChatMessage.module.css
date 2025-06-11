@@ -8,7 +8,8 @@
 
 .message {
     padding: 20px;
-    background: #ffd8dd;
+    /* background: #ffd8dd; */
+    background: #c8d8f8;
     border-radius: 8px;
     box-shadow:
         0px 2px 4px rgba(0, 0, 0, 0.14),
