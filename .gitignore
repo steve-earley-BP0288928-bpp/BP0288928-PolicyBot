@@ -297,6 +297,7 @@ dist
 
 data/
 static/
+offline_pdfs/
 
 .vscode
 .DS_Store
