@@ -301,3 +301,5 @@ offline_pdfs/
 
 .vscode
 .DS_Store
+data/error_downloads.jsonl
+data/error_downloads.jsonl
