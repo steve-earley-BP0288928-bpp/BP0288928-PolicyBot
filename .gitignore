@@ -303,3 +303,6 @@ offline_pdfs/
 .DS_Store
 data/error_downloads.jsonl
 data/error_downloads.jsonl
+download_log
+data/error_downloads.jsonl
+data/ingested_data.json
