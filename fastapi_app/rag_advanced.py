@@ -6,8 +6,7 @@ from typing import (
 )
 from .logger import logger
 
-from openai import AsyncAzureOpenAI  # 11-JUL-2025
-from openai import AsyncOpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI
 from openai.types.chat import (
     ChatCompletion,
 )
@@ -26,7 +25,7 @@ class AdvancedRAGChat:
         self,
         *,
         searcher: PostgresSearcher,
-        chat_client: AsyncOpenAI,  # 11-JUL-2025
+        chat_client: AsyncAzureOpenAI,  # 11-JUL-2025
         chat_model: str,
         embed_model: str,
         embed_dimensions: int,
@@ -89,7 +88,6 @@ class AdvancedRAGChat:
             fallback_to_default=True,
         )
 
-        logger.info(f"I AM DOING chat_completion_response")
         chat_completion_response = await self.chat_client.chat.completions.create(
             model=self.chat_model,
             messages=messages,
@@ -115,13 +113,10 @@ class AdvancedRAGChat:
             fallback_to_default=True
         )
 
-        logger.info(f"I AM DOING chat_completion_clar_response")
         chat_completion_clar_response = await self.chat_client.chat.completions.create(
             messages=messages,
             # Azure OpenAI takes the deployment name as the model name
-            # 11-JUL-2025
             model=self.chat_model,
-            # model="gpt-4.1-mini",
             temperature=0,  # Setting temperature to 0 for testing
             max_tokens=response_token_limit,
             n=1,
@@ -141,7 +136,6 @@ class AdvancedRAGChat:
         Takes the user query (`original_user_query`) and past messages (`past_messages`), using function calling to ask the model 
         to decide which categories the user query fits in, and returns how the model would handle the query.  
         """
-        # logger.info(f"I AM IN classify_query line 542")
         # Generate prompt that asks the model to first classify the query before answering
         query_messages = build_messages(
             model=self.chat_model,
@@ -153,8 +147,6 @@ class AdvancedRAGChat:
             fallback_to_default=True,
         )
 
-        logger.info(
-            f"I AM DOING chat_completion_resp_filter in classify_query 156")
         chat_completion_resp_filter: ChatCompletion = await self.chat_client.chat.completions.create(
             messages=query_messages,  # type: ignore
             model=self.chat_model,
@@ -168,7 +160,6 @@ class AdvancedRAGChat:
         )
 
         # Extract model decision on query classification
-
         to_greet, is_follow_up, is_reference, is_relevant, requires_clarification, is_farewell = extract_json(
             chat_completion_resp_filter)
         logger.info(f"to_greet: {to_greet}, is_follow_up: {is_follow_up}, is_reference: {is_reference}, is_relevant: {is_relevant}, requires_clarification: {requires_clarification}, is_farewell: {is_farewell}")
@@ -462,15 +453,9 @@ class AdvancedRAGChat:
         # Generate answer to user query
         response_token_limit = 1024
 
-        logger.info(f"I AM DOING chat_completion_response in run")
-        logger.info(f"self.chat_client: {self.chat_client}")
-        logger.info(
-            f"global_storage.chat_client: {global_storage.chat_client}")
-        chat_completion_response = await global_storage.chat_client.chat.completions.create(
+        chat_completion_response = await self.chat_client.chat.completions.create(
             # Azure OpenAI takes the deployment name as the model name
-            # 11-JUL-2025
-            model=global_storage.chat_model,
-            # model="gpt-4.1-mini",
+            model=self.chat_model,
             messages=messages,
             temperature=0,  # Setting temperature to 0 for testing
             max_tokens=response_token_limit,
@@ -547,7 +532,6 @@ class QueryRewriterRAG(AdvancedRAGChat):
         Takes the user query (`original_user_query`) and past messages (`past_messages`), using function calling to ask the model 
         to decide which categories the user query fits in, and returns how the model would handle the query.  
         """
-        logger.info(f"I AM DOING build_messages")
         # Generate prompt that asks the model to first classify the query before answering
         query_messages = build_messages(
             model=self.chat_model,
@@ -558,9 +542,6 @@ class QueryRewriterRAG(AdvancedRAGChat):
             max_tokens=self.chat_token_limit - query_response_token_limit,
             fallback_to_default=True,
         )
-
-        # TODO something here is expecting Ollama
-        logger.info(f"I AM DOING chat_completion_resp_filter in classify_query")
 
         chat_completion_resp_filter: ChatCompletion = await self.chat_client.chat.completions.create(
             messages=query_messages,  # type: ignore
@@ -610,7 +591,6 @@ class QueryRewriterRAG(AdvancedRAGChat):
                 fallback_to_default=True,
             )
 
-        logger.info(f"I AM DOING chat_completion_resp_query_rewriter")
         chat_completion_resp_query_rewriter: ChatCompletion = await self.chat_client.chat.completions.create(
             messages=query_messages,  # type: ignore
             model=self.chat_model,
@@ -714,7 +694,6 @@ class QueryRewriterRAG(AdvancedRAGChat):
         search_query = await self.rewrite_search_query(original_user_query, past_messages, past_n=1)
 
         logger.info(f"Rewritten Query: {search_query}")
-        # logger.info(f"I AM IN classify_and_build_message_wrapper")
 
         # Classify user query before deciding how to handle the query (e.g. use RAG)
         to_greet, is_relevant, is_farewell = await self.classify_query(search_query, past_messages, query_response_token_limit)

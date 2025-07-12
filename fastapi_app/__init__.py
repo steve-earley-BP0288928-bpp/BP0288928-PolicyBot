@@ -24,14 +24,14 @@ AZURE_OPENAI_CHAT_MODEL_VERSION = os.getenv("AZURE_OPENAI_CHAT_MODEL_VERSION")
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
-    load_dotenv(override=False)
+    load_dotenv(override=True)
 
     engine = await create_postgres_engine_from_env()
     global_storage.engine = engine
 
     # 11-JUL-2025 add await after the = on next line
     # chat_client, chat_model = await create_chat_client()
-    logger.info("Creating AsyncAzureOpenAI Chat Client in init")
+    logger.info("Creating AsyncAzureOpenAI Chat Client")
     chat_client = AsyncAzureOpenAI(
         azure_endpoint=AZURE_OPENAI_ENDPOINT,
         api_key=AZURE_OPENAI_API_KEY,

@@ -22,9 +22,7 @@ async def create_chat_client():
     #     base_url=os.getenv("OLLAMA_ENDPOINT"),
     #     api_key="nokeyneeded",
     # )
-
-    # 11-JUL-2025
-    logger.info("Creating AsyncAzureOpenAI Chat Client in clients")
+    logger.info("Creating AsyncAzureOpenAI Chat Client in clients.py")
     chat_client = AsyncAzureOpenAI(
         azure_endpoint=AZURE_OPENAI_ENDPOINT,
         api_key=AZURE_OPENAI_API_KEY,
