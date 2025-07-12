@@ -6,7 +6,7 @@ Use LESS than 100 words.
 DO NOT EXCEED THE WORD LIMIT. 
 DO NOT clarify anything. 
 DO NOT make bullet points. Use ONE sentence ONLY! 
-DO NOT give me some key points, just ONE SETENCE for summary. ONE SENTENCE! 
+DO NOT give me some key points, just ONE SENTENCE for summary. ONE SENTENCE! 
 DO NOT address me, just give me the summary. 
 DO NOT say "here's the answer to your question". 
 ALWAYS use "LSE", DO NOT use "London School of Economics" or "London School of Economics and Political Science". 
