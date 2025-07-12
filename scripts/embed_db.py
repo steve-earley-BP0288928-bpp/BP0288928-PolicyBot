@@ -1,8 +1,11 @@
 import os
 import openai
+from openai import AzureOpenAI  # 11-JUL-2025
 import logging
 import pandas as pd
 from dotenv import load_dotenv
+
+import time
 
 import sqlalchemy
 from sqlalchemy import text
@@ -16,15 +19,27 @@ logger = logging.getLogger("ragapp")
 
 load_dotenv(override=True)
 
-OLLAMA_ENDPOINT = os.getenv("OLLAMA_ENDPOINT")
-CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL")
-EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL")
+# OLLAMA_ENDPOINT = os.getenv("OLLAMA_ENDPOINT")
+# CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL")
+# EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL")
 
-CHAT_MODEL_INSTANCE = openai.OpenAI(
-    base_url=OLLAMA_ENDPOINT,
-    api_key="nokeyneeded",
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_CHAT_MODEL = os.getenv("AZURE_OPENAI_CHAT_MODEL")
+AZURE_OPENAI_CHAT_MODEL_VERSION = os.getenv("AZURE_OPENAI_CHAT_MODEL_VERSION")
+EMBED_MODEL = os.getenv("EMBED_MODEL")
+
+# CHAT_MODEL_INSTANCE = openai.OpenAI(
+#     base_url=OLLAMA_ENDPOINT,
+#     api_key="nokeyneeded",
+# )
+
+# 11-JUL-2025
+CHAT_MODEL_INSTANCE = openai.AzureOpenAI(
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_key=AZURE_OPENAI_API_KEY,
+    api_version=AZURE_OPENAI_CHAT_MODEL_VERSION
 )
-
 
 EMBED_MODEL_INSTANCE = HuggingFaceEmbedding(EMBED_MODEL)
 
@@ -124,7 +139,7 @@ with engine.connect() as conn:
                         summary = f"School Regulations for 20{title[10:15]}"
                     else:
                         summary = summarise_and_embed_sync(
-                            doc, chat_model=CHAT_MODEL, chat_model_instance=CHAT_MODEL_INSTANCE, embed_model_instance=EMBED_MODEL_INSTANCE)
+                            doc, chat_model=AZURE_OPENAI_CHAT_MODEL, chat_model_instance=CHAT_MODEL_INSTANCE, embed_model_instance=EMBED_MODEL_INSTANCE)
 
                     # Manually handle some problems with summary format that can't be solved with prompt engineering
                     summary = summary.split(".")[0] + "."
@@ -164,6 +179,9 @@ with engine.connect() as conn:
             conn.commit()
 
             logger.info(f"Embedding calculated and updated for id: {id}")
+
+            # Wait before processing the next record to deal with Azure OpenAI limiting
+            time.sleep(1)
     else:
         logger.info("No rows with NULL embeddings found. No updates needed.")
 
