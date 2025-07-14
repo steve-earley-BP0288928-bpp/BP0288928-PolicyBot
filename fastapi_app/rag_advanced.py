@@ -255,7 +255,6 @@ class AdvancedRAGChat:
             # query_text = None
             if vector_search:
                 if clarification_response:
-                    # TODO: Create a optimised search query instead of just using the previous user query
                     logger.info(
                         f"Entering clarification response vector search with query text: {past_messages[-2]['content']}")
                     vector = await compute_text_embedding(
@@ -431,6 +430,10 @@ class AdvancedRAGChat:
 
         original_user_query = messages[-1]["content"]
         past_messages = messages[:-1]
+
+        # TODO - added this for debugging
+        logger.info(f"original_user_query type: {type(original_user_query)}")
+        logger.info(f"messages: {messages}")
 
         # Clear cached RAG results if it builds up
         if len(global_storage.rag_results) >= 3:
