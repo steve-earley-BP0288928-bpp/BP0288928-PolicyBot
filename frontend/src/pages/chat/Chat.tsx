@@ -169,15 +169,27 @@ const Chat = () => {
                                 experience, or go directly to chatting by typing in your query below:
                             </h2>
                             <ol className={styles.contextList} type="1">
+                                <li className={styles.contextChatContainer}>Your name: </li>
+                                <div className={styles.contextInputContainer}>
+                                    <TextField
+                                        className={styles.contextInputTextArea}
+                                        resizable={false}
+                                        borderless
+                                        value={StudyLevelInfo}
+                                        onChange={(e) => setStudyLevelInfo((e.target as HTMLInputElement).value)}
+                                    // placeholder="E.g. undergraduate, master's degree, PhD, etc."
+                                    />
+                                </div>
                                 {/* <li className={styles.contextChatContainer}>Your role within the LSE: </li> */}
-                                <li className={styles.contextChatContainer}>Your role within LSE: </li>
+                                <li className={styles.contextChatContainer}>Your role at LSE: </li>
                                 <div className={styles.contextInputContainer}>
                                     <TextField
                                         resizable={false}
                                         borderless
                                         value={RoleInfo}
                                         onChange={(e) => setRoleInfo((e.target as HTMLInputElement).value)}
-                                        placeholder="E.g. student, teaching staff, professional service staff, etc."
+                                        //placeholder="E.g. student, teaching staff, professional service staff, etc."
+                                        placeholder="e.g. professional service staff etc."
                                     />
                                 </div>
                                 <li className={styles.contextChatContainer}>Your affiliation: </li>
@@ -188,7 +200,7 @@ const Chat = () => {
                                         borderless
                                         value={AffiliationInfo}
                                         onChange={(e) => setAffiliationInfo((e.target as HTMLInputElement).value)}
-                                        placeholder="E.g. academic/administrative department, institution, etc."
+                                        placeholder="e.g. division, academic department etc."
                                     />
                                 </div>
                                 {/* <li className={styles.contextChatContainer}>If applicable, your level of study: </li>
