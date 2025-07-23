@@ -11,7 +11,8 @@ from datetime import datetime
 load_dotenv()
 
 # get the current date for the log filename
-now = datetime.now().strftime('%Y-%m-%d_%H-%M')
+# now = datetime.now().strftime('%Y-%m-%d_%H-%M')
+now = datetime.now().strftime('%Y-%m-%d')
 
 token = os.getenv('LOGTAIL_TOKEN')
 
@@ -42,8 +43,11 @@ def handle_new_message(message):
         global_storage.message_history = global_storage.message_history[-6:]
 
 
-formatter = CustomFormatter(
+app_formatter = CustomFormatter(
     "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - %(message)s - User context: %(user_context)s - Chat Class: %(chat_class)s")
+
+sys_formatter = logging.Formatter(
+    "%(asctime)s - %(levelname)s - Action: %(message)s")
 
 # create ExcludeWarningsFilter class to remove unneccessary logs (e.g. "defaulting to Cl100k")
 
@@ -77,16 +81,15 @@ class ExcludeWarningsAndHTTPFilter(logging.Filter):
 
         # If none of the above conditions are met, allow the log
         return True
+
+
 # create handlers
-
-
-# stream_handler = logging.StreamHandler(sys.stdout)
 file_handler = logging.FileHandler(f'app_log_{now}.log')
 better_stack_handler = LogtailHandler(source_token=token)
 
 # set formatters
-# stream_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
+file_handler.setFormatter(app_formatter)
+file_handler.setFormatter(sys_formatter)
 
 # add handlers to the logger
 logger.handlers = [file_handler, better_stack_handler]
@@ -97,7 +100,6 @@ logger.setLevel(logging.INFO)
 exclude_warnings_filter = ExcludeWarningsAndHTTPFilter()
 logger.addFilter(exclude_warnings_filter)
 
-# ensuring that exclude_warnings_filter runs on all three handlers
-# stream_handler.addFilter(exclude_warnings_filter)
+# ensuring that exclude_warnings_filter runs on both handlers
 file_handler.addFilter(exclude_warnings_filter)
 better_stack_handler.addFilter(exclude_warnings_filter)
