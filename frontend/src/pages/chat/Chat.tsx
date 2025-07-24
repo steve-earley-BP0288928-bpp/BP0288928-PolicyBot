@@ -25,7 +25,7 @@ import { VectorSettings } from "../../components/VectorSettings";
 const Chat = () => {
     const [RoleInfo, setRoleInfo] = useState<string>("");
     const [AffiliationInfo, setAffiliationInfo] = useState<string>("");
-    const [StudyLevelInfo, setStudyLevelInfo] = useState<string>("");
+    const [UserName, setUserName] = useState<string>("");
 
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
     const [promptTemplate, setPromptTemplate] = useState<string>("");
@@ -67,7 +67,7 @@ const Chat = () => {
                     userInfo: {
                         role: RoleInfo,
                         department: AffiliationInfo,
-                        level_of_study: StudyLevelInfo
+                        user_name: UserName
                     },
                     overrides: {
                         top: retrieveCount,
@@ -175,8 +175,8 @@ const Chat = () => {
                                         className={styles.contextInputTextArea}
                                         resizable={false}
                                         borderless
-                                        value={StudyLevelInfo}
-                                        onChange={(e) => setStudyLevelInfo((e.target as HTMLInputElement).value)}
+                                        value={UserName}
+                                        onChange={(e) => setUserName((e.target as HTMLInputElement).value)}
                                     // placeholder="E.g. undergraduate, master's degree, PhD, etc."
                                     />
                                 </div>

@@ -623,14 +623,14 @@ class QueryRewriterRAG(AdvancedRAGChat):
                     user_context = json.loads(user_context.replace("'", '"'))
                     role = user_context["role"]
                     affiliation = user_context["department"]
-                    level = user_context["level_of_study"]
+                    username = user_context["user_name"]
                     context_sentence = "I am "
-                    if level or role:
-                        context_sentence += f"a(n) {level.rstrip().lower()} {role.rstrip().lower()} "
+                    if username or role:
+                        context_sentence += f"a(n) {username.rstrip().lower()} {role.rstrip().lower()} "
                     if affiliation:
                         context_sentence += f"from {affiliation.rstrip()}. "
 
-                    if role or affiliation or level:
+                    if role or affiliation or username:
                         search_query = context_sentence+search_query
 
                 logger.info(
