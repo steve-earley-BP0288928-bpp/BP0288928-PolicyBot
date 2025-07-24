@@ -26,13 +26,20 @@ class CustomFormatter(logging.Formatter):
     def format(self, record):
         record.model = getattr(
             global_storage, 'chat_model', 'No Model Selected')
-        record.summariser = getattr(global_storage, 'to_summarise', False)
-        record.user_context = getattr(global_storage, 'user_context', {})
-        record.chat_class = getattr(global_storage, 'chat_class', None)
-        # Join messages into a single string
-        record.message_history = " | ".join(global_storage.message_history)
-        format_string = "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - User context: %(user_context)s - Chat Class: %(chat_class)s"
-        formatter = logging.Formatter(format_string)
+
+        if record.model:
+            record.summariser = getattr(global_storage, 'to_summarise', False)
+            record.user_context = getattr(global_storage, 'user_context', {})
+
+            record.chat_class = getattr(global_storage, 'chat_class', None)
+            # Join messages into a single string
+            record.message_history = " | ".join(global_storage.message_history)
+            # record.username = getattr(global_storage, 'user_name', 'WHOAMI')
+            format_string = "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - User context: %(user_context)s - Chat Class: %(chat_class)s"
+            formatter = logging.Formatter(format_string)
+        else:
+            format_string = "%(asctime)s - %(levelname)s - Action: %(message)s"
+            formatter = logging.Formatter(format_string)
         return formatter.format(record)
 
 
@@ -43,11 +50,8 @@ def handle_new_message(message):
         global_storage.message_history = global_storage.message_history[-6:]
 
 
-app_formatter = CustomFormatter(
+formatter = CustomFormatter(
     "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - %(message)s - User context: %(user_context)s - Chat Class: %(chat_class)s")
-
-sys_formatter = logging.Formatter(
-    "%(asctime)s - %(levelname)s - Action: %(message)s")
 
 # create ExcludeWarningsFilter class to remove unneccessary logs (e.g. "defaulting to Cl100k")
 
@@ -88,8 +92,7 @@ file_handler = logging.FileHandler(f'app_log_{now}.log')
 better_stack_handler = LogtailHandler(source_token=token)
 
 # set formatters
-file_handler.setFormatter(app_formatter)
-file_handler.setFormatter(sys_formatter)
+file_handler.setFormatter(formatter)
 
 # add handlers to the logger
 logger.handlers = [file_handler, better_stack_handler]
