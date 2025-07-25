@@ -25,12 +25,11 @@ logger = logging.getLogger("ragapp")
 class CustomFormatter(logging.Formatter):
     def format(self, record):
         # Need to determine if the log entry is from the chat session or not to set the format correctly
-        record.model = getattr(global_storage, 'chat_model')
+        record.user_context = getattr(global_storage, 'user_context', {})
 
-        if record.model:
+        if record.user_context:
             record.summariser = getattr(global_storage, 'to_summarise', False)
-            record.user_context = getattr(global_storage, 'user_context', {})
-
+            record.model = getattr(global_storage, 'chat_model')
             record.chat_class = getattr(global_storage, 'chat_class', None)
             # Join messages into a single string - change concatenation character so the log messages can be pipe delimited
             # record.message_history = " | ".join(global_storage.message_history)
