@@ -44,7 +44,9 @@ class CustomFormatter(logging.Formatter):
 
 
 def handle_new_message(message):
-    global_storage.message_history.append(message)
+    cleaned_message = message.replace('\n', '\\n').replace('\r', '\\r')
+
+    global_storage.message_history.append(cleaned_message)
 
     if len(global_storage.message_history) > 6:
         global_storage.message_history = global_storage.message_history[-6:]
