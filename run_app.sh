@@ -1,6 +1,7 @@
 #!/bin/bash
 
-WEBPAGE_URL="http://localhost:5173"
+# Get current date for log file
+LOG_DATE=$(date +"%Y-%m-%d")
 
 # Function to check if iTerm is running
 check_iterm() {
@@ -14,52 +15,56 @@ check_iterm() {
 # Start iTerm if not running
 check_iterm
 
-# && bash 'scripts/start_backend.sh'"
-# && bash 'scripts/start_backend.sh'
-
-# Create AppleScript to manage iTerm sessions
+# AppleScript to open separate iTerm sessions for the backend and frontend processes
 osascript <<EOF
 tell application "iTerm"
     activate
     
-    -- Start backend in one iTerm window
+    -- Start the backend
     set newWindow1 to (create window with default profile)
     tell current session of newWindow1
-        write text "cd /Users/steve/chat-lse && conda activate chat-lse"
+        write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
+        write text "conda activate chat-lse"
+        write text "cd /Users/steve/chat-lse"
+        write text "sh scripts/start_backend.sh"
     end tell
     
-    -- Start frontend in another iTerm window
+    -- Start the frontend
     set newWindow2 to (create window with default profile)
     tell current session of newWindow2
-        write text "cd /Users/steve/chat-lse && conda activate chat-lse && bash 'scripts/start_frontend.sh'"
-    end tell
-    
-    -- Tail the log a third iTerm window
-    set newWindow3 to (create window with default profile)
-    tell current session of newWindow3
-        write text "cd /Users/steve/chat-lse && tail -f 'app_log_2025-07-23.log'"
+        write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
+        write text "conda activate chat-lse"
+        write text "cd /Users/steve/chat-lse"
+        write text "sh scripts/start_frontend.sh"
     end tell
     
 end tell
 EOF
 
-# Wait a moment for iTerm to settle
-sleep 5
+# Wait for the backend process to fully start
+sleep 10
 
-# Open Safari with the specified webpage
-echo "Opening Safari with webpage..."
+# AppleScript to tail the log file
+osascript <<EOF
+tell application "iTerm"
+    activate
+    
+    -- Tail the log
+    set newWindow3 to (create window with default profile)
+    tell current session of newWindow3
+        write text "cd /Users/steve/chat-lse/logs"
+        write text "tail -f app_log_$LOG_DATE.log"
+    end tell
+end tell
+EOF
+
+# AppleScript to open Safari with the chat-lse interface
 osascript <<EOF
 tell application "Safari"
     activate
     if (count of windows) = 0 then
         make new document at end of documents
     end if
-    set URL of current tab of front window to "$WEBPAGE_URL"
+    set URL of current tab of front window to "http://localhost:5173"
 end tell
 EOF
-
-echo "Setup complete!"
-echo "- Script 1 running in iTerm window 1"
-echo "- Script 2 running in iTerm window 2" 
-echo "- Log file being tailed in iTerm window 3"
-echo "- Safari opened with specified webpage"
