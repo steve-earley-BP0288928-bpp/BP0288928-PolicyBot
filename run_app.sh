@@ -3,6 +3,13 @@
 # Get current date for log file
 LOG_DATE=$(date +"%Y-%m-%d")
 
+# Bounds for the windows
+BACKEND_BOUNDS="{1280, 0, 2560, 540}" # Top Right
+FRONTEND_BOUNDS="{1280, 540, 2560, 720}" # Middle Right
+LOGTAIL_BOUNDS="{1280, 720, 2560, 1440}" # Bottom Right
+SAFARI_BOUNDS="{0, 0, 1280, 1440}" # Left
+
+
 # Function to check if iTerm is running
 check_iterm() {
     if ! pgrep -f "iTerm" > /dev/null; then
@@ -22,15 +29,25 @@ tell application "iTerm"
     
     -- Start the backend
     set newWindow1 to (create window with default profile)
+
+    tell newWindow1
+        set bounds to $BACKEND_BOUNDS
+    end tell
+
     tell current session of newWindow1
         write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
         write text "conda activate chat-lse"
         write text "cd /Users/steve/chat-lse"
         write text "sh scripts/start_backend.sh"
     end tell
-    
+
     -- Start the frontend
     set newWindow2 to (create window with default profile)
+
+    tell newWindow2
+        set bounds to $FRONTEND_BOUNDS
+    end tell
+
     tell current session of newWindow2
         write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
         write text "conda activate chat-lse"
@@ -51,6 +68,11 @@ tell application "iTerm"
     
     -- Tail the log
     set newWindow3 to (create window with default profile)
+
+    tell newWindow3
+        set bounds to $LOGTAIL_BOUNDS
+    end tell
+
     tell current session of newWindow3
         write text "cd /Users/steve/chat-lse/logs"
         write text "tail -f app_log_$LOG_DATE.log"
@@ -65,6 +87,11 @@ tell application "Safari"
     if (count of windows) = 0 then
         make new document at end of documents
     end if
+
+    tell front window
+        set bounds to $SAFARI_BOUNDS
+    end tell
+
     set URL of current tab of front window to "http://localhost:5173"
 end tell
 EOF
