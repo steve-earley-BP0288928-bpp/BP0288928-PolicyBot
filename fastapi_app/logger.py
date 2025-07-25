@@ -34,7 +34,6 @@ class CustomFormatter(logging.Formatter):
             record.chat_class = getattr(global_storage, 'chat_class', None)
             # Join messages into a single string
             record.message_history = " | ".join(global_storage.message_history)
-            # record.username = getattr(global_storage, 'user_name', 'WHOAMI')
             format_string = "%(asctime)s - %(levelname)s - User context: %(user_context)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - Chat Class: %(chat_class)s"
             formatter = logging.Formatter(format_string)
         else:

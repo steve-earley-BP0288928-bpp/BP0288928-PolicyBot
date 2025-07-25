@@ -10,7 +10,7 @@ const Layout = () => {
                 <div className={styles.headerContainer}>
                     <Link to="/" className={styles.headerTitleContainer}>
                         {/* <h3 className={styles.headerTitle}>Chat LSE</h3> */}
-                        <h3 className={styles.headerTitle}>Steve Earley - MSc Research Project</h3>
+                        <h3 className={styles.headerTitle}>BP0288928 - MSc Applied Data Analytics - Research Project</h3>
                     </Link>
                     {/* <h4 className={styles.headerRightText}>Llama + PostgreSQL</h4> */}
                 </div>

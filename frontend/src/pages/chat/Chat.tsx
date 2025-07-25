@@ -23,9 +23,9 @@ import { ClearChatButton } from "../../components/ClearChatButton";
 import { VectorSettings } from "../../components/VectorSettings";
 
 const Chat = () => {
+    const [ParticipantCode, setParticipantCode] = useState<string>("");
     const [RoleInfo, setRoleInfo] = useState<string>("");
     const [AffiliationInfo, setAffiliationInfo] = useState<string>("");
-    const [UserName, setUserName] = useState<string>("");
 
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
     const [promptTemplate, setPromptTemplate] = useState<string>("");
@@ -65,9 +65,9 @@ const Chat = () => {
                 messages: [...messages, { content: question, role: "user" }],
                 context: {
                     userInfo: {
+                        participant_code: ParticipantCode,
                         role: RoleInfo,
-                        department: AffiliationInfo,
-                        user_name: UserName
+                        affiliation: AffiliationInfo
                     },
                     overrides: {
                         top: retrieveCount,
@@ -163,25 +163,25 @@ const Chat = () => {
                             {/* <SparkleFilled fontSize={"80px"} primaryFill={"rgba(225, 115, 115, 1)"} aria-hidden="true" aria-label="Chat logo" /> */}
                             <img src="../src/assets/bpp.png" alt="BPP University logo" style={{ width: "230px", height: "114px" }} />
                             {/* <h1 className={styles.chatEmptyStateTitle}>Chat LSE</h1> */}
-                            <h1 className={styles.chatEmptyStateTitle}>Steve Earley - MSc Research Project</h1>
+                            <h1 className={styles.chatEmptyStateTitle}>BP0288928 - MSc Applied Data Analytics - Research Project</h1>
                             <h2 className={styles.chatEmptyStateSubtitle}>
-                                Please fill in the context information below for a more tailored chatting <br />
-                                experience, or go directly to chatting by typing in your query below:
+                                Thank you for participating in this research project.<br />Please provide the following context information before starting:
                             </h2>
                             <ol className={styles.contextList} type="1">
-                                <li className={styles.contextChatContainer}>Your name: </li>
+                                <li className={styles.contextChatContainer}>Participant Code: </li>
                                 <div className={styles.contextInputContainer}>
                                     <TextField
                                         className={styles.contextInputTextArea}
                                         resizable={false}
                                         borderless
-                                        value={UserName}
-                                        onChange={(e) => setUserName((e.target as HTMLInputElement).value)}
-                                    // placeholder="E.g. undergraduate, master's degree, PhD, etc."
+                                        value={ParticipantCode}
+                                        onChange={(e) => setParticipantCode((e.target as HTMLInputElement).value)}
+                                        // placeholder="E.g. undergraduate, master's degree, PhD, etc."
+                                        placeholder="To be provided"
                                     />
                                 </div>
                                 {/* <li className={styles.contextChatContainer}>Your role within the LSE: </li> */}
-                                <li className={styles.contextChatContainer}>Your role at LSE: </li>
+                                <li className={styles.contextChatContainer}>Role: </li>
                                 <div className={styles.contextInputContainer}>
                                     <TextField
                                         resizable={false}
@@ -192,7 +192,7 @@ const Chat = () => {
                                         placeholder="e.g. professional service staff etc."
                                     />
                                 </div>
-                                <li className={styles.contextChatContainer}>Your affiliation: </li>
+                                <li className={styles.contextChatContainer}>Affiliation: </li>
                                 <div className={styles.contextInputContainer}>
                                     <TextField
                                         className={styles.questionInputTextArea}

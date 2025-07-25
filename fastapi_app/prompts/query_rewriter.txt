@@ -4,6 +4,7 @@ You MUST look at the history of the conversation, and rewrite the user query to 
 If the query does not need to include previous information from the conversation, RETURN THE ORIGINAL QUERY! 
 You MUST include ALL the information contained in the user query. 
 Do not overly emphasise "user_context". 
+Do not use the "participant_code" information from "user_context".
 Try to be concise without losing any information. 
 DO NOT answer the user query! ONLY rephrase the original query. 
 Do not clarify anything. Just produce an output based on the instruction. 

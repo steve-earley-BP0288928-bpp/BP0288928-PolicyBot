@@ -15,9 +15,9 @@ export type ChatAppRequestOverrides = {
 };
 
 export type ChatAppRequestUserInfo = {
+    participant_code?: string;
     role?: string;
-    department?: string;
-    level_of_study?: string;
+    affiliation?: string;
 };
 
 export type ResponseMessage = {
@@ -54,7 +54,7 @@ export type ChatAppResponse = {
 };
 
 export type ChatAppRequestContext = {
-    userInfo?: ChatAppRequestUserInfo; 
+    userInfo?: ChatAppRequestUserInfo;
     overrides?: ChatAppRequestOverrides;
 };
 
