@@ -24,8 +24,8 @@ logger = logging.getLogger("ragapp")
 
 class CustomFormatter(logging.Formatter):
     def format(self, record):
-        record.model = getattr(
-            global_storage, 'chat_model', 'No Model Selected')
+        # Need to determine if the log entry is from the chat session or not to set the format correctly
+        record.model = getattr(global_storage, 'chat_model')
 
         if record.model:
             record.summariser = getattr(global_storage, 'to_summarise', False)
@@ -35,10 +35,10 @@ class CustomFormatter(logging.Formatter):
             # Join messages into a single string
             record.message_history = " | ".join(global_storage.message_history)
             # record.username = getattr(global_storage, 'user_name', 'WHOAMI')
-            format_string = "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - User context: %(user_context)s - Chat Class: %(chat_class)s"
+            format_string = "%(asctime)s - %(levelname)s - User context: %(user_context)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - Chat Class: %(chat_class)s"
             formatter = logging.Formatter(format_string)
         else:
-            format_string = "%(asctime)s - %(levelname)s - Action: %(message)s"
+            format_string = "%(asctime)s - %(levelname)s - User context: %(user_context)s - Action: %(message)s"
             formatter = logging.Formatter(format_string)
         return formatter.format(record)
 
@@ -51,7 +51,7 @@ def handle_new_message(message):
 
 
 formatter = CustomFormatter(
-    "%(asctime)s - %(levelname)s - Model: %(model)s - Summariser: %(summariser)s - %(message)s - User context: %(user_context)s - Chat Class: %(chat_class)s")
+    "%(asctime)s - %(levelname)s - User context: %(user_context)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - Chat Class: %(chat_class)s")
 
 # create ExcludeWarningsFilter class to remove unneccessary logs (e.g. "defaulting to Cl100k")
 
