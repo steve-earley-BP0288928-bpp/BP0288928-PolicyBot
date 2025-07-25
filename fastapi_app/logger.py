@@ -88,7 +88,7 @@ class ExcludeWarningsAndHTTPFilter(logging.Filter):
 
 
 # create handlers
-file_handler = logging.FileHandler(f'app_log_{now}.log')
+file_handler = logging.FileHandler(f'logs/app_log_{now}.log')
 better_stack_handler = LogtailHandler(source_token=token)
 
 # set formatters
