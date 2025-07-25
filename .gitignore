@@ -309,3 +309,4 @@ data/ingested_data.json
 app.log.orig
 data/ingested_data.json
 data/error_downloads.jsonl
+scripts/parsed_logs.csv
