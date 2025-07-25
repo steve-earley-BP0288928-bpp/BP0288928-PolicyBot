@@ -4,8 +4,8 @@
 LOG_DATE=$(date +"%Y-%m-%d")
 
 # Bounds for the windows
-BACKEND_BOUNDS="{1280, 0, 2560, 540}" # Top Right
-FRONTEND_BOUNDS="{1280, 540, 2560, 720}" # Middle Right
+BACKEND_BOUNDS="{1280, 0, 2560, 500}" # Top Right
+FRONTEND_BOUNDS="{1280, 540, 2560, 700}" # Middle Right
 LOGTAIL_BOUNDS="{1280, 720, 2560, 1440}" # Bottom Right
 SAFARI_BOUNDS="{0, 0, 1280, 1440}" # Left
 
