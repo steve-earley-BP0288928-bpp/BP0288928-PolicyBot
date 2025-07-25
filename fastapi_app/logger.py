@@ -32,12 +32,14 @@ class CustomFormatter(logging.Formatter):
             record.user_context = getattr(global_storage, 'user_context', {})
 
             record.chat_class = getattr(global_storage, 'chat_class', None)
-            # Join messages into a single string
-            record.message_history = " | ".join(global_storage.message_history)
-            format_string = "%(asctime)s - %(levelname)s - User context: %(user_context)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - Chat Class: %(chat_class)s"
+            # Join messages into a single string - change concatenation character so the log messages can be pipe delimited
+            # record.message_history = " | ".join(global_storage.message_history)
+            record.message_history = " ~~~ ".join(
+                global_storage.message_history)
+            format_string = "%(asctime)s|%(levelname)s|User context: %(user_context)s|Model: %(model)s|Summariser: %(summariser)s|Chat Class: %(chat_class)s|Messages: %(message_history)s"
             formatter = logging.Formatter(format_string)
         else:
-            format_string = "%(asctime)s - %(levelname)s - User context: %(user_context)s - Action: %(message)s"
+            format_string = "%(asctime)s|%(levelname)s|User context: %(user_context)s|Action: %(message)s"
             formatter = logging.Formatter(format_string)
         return formatter.format(record)
 
@@ -50,7 +52,7 @@ def handle_new_message(message):
 
 
 formatter = CustomFormatter(
-    "%(asctime)s - %(levelname)s - User context: %(user_context)s - Model: %(model)s - Summariser: %(summariser)s - Messages: %(message_history)s - Chat Class: %(chat_class)s")
+    "%(asctime)s|%(levelname)s|User context: %(user_context)s|Model: %(model)s|Summariser: %(summariser)s|Chat Class: %(chat_class)s|Messages: %(message_history)s")
 
 # create ExcludeWarningsFilter class to remove unneccessary logs (e.g. "defaulting to Cl100k")
 
