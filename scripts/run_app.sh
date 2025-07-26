@@ -14,7 +14,7 @@ RESOLUTION=$( osascript -e 'tell application "Finder" to get bounds of window of
 WIDTH=$(echo "$RESOLUTION" | awk -F', ' '{print $3}')
 HEIGHT=$(echo "$RESOLUTION" | awk -F', ' '{print $4}')
 
-BACKEND_BOUNDS="{$((WIDTH/2)), 0, ${WIDTH}, $((HEIGHT*35/100))}"
+BACKEND_BOUNDS="{$((WIDTH/2)), 0, ${WIDTH}, $((HEIGHT*34/100))}"
 FRONTEND_BOUNDS="{$((WIDTH/2)), $((HEIGHT*38/100)), ${WIDTH}, $((HEIGHT*49/100))}"
 LOGTAIL_BOUNDS="{$((WIDTH/2)), $((HEIGHT/2)), ${WIDTH}, ${HEIGHT}}"
 SAFARI_BOUNDS="{0, 0, $((WIDTH/2)), ${HEIGHT}}"
