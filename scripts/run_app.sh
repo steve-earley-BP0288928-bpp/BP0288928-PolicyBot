@@ -4,11 +4,20 @@
 LOG_DATE=$(date +"%Y-%m-%d")
 
 # Bounds for the windows
-BACKEND_BOUNDS="{1280, 0, 2560, 500}" # Top Right
-FRONTEND_BOUNDS="{1280, 540, 2560, 700}" # Middle Right
-LOGTAIL_BOUNDS="{1280, 720, 2560, 1440}" # Bottom Right
-SAFARI_BOUNDS="{0, 0, 1280, 1440}" # Left
+# These fixed values are for iMac in default display configuration
+# BACKEND_BOUNDS="{1280, 0, 2560, 500}" # Top Right with some separation
+# FRONTEND_BOUNDS="{1280, 540, 2560, 700}" # Middle Right with some separation
+# LOGTAIL_BOUNDS="{1280, 720, 2560, 1440}" # Bottom Right
+# SAFARI_BOUNDS="{0, 0, 1280, 1440}" # Left
 
+RESOLUTION=$( osascript -e 'tell application "Finder" to get bounds of window of desktop' )
+WIDTH=$(echo "$RESOLUTION" | awk -F', ' '{print $3}')
+HEIGHT=$(echo "$RESOLUTION" | awk -F', ' '{print $4}')
+
+BACKEND_BOUNDS="{$((WIDTH/2)), 0, ${WIDTH}, $((HEIGHT*35/100))}"
+FRONTEND_BOUNDS="{$((WIDTH/2)), $((HEIGHT*38/100)), ${WIDTH}, $((HEIGHT*49/100))}"
+LOGTAIL_BOUNDS="{$((WIDTH/2)), $((HEIGHT/2)), ${WIDTH}, ${HEIGHT}}"
+SAFARI_BOUNDS="{0, 0, $((WIDTH/2)), ${HEIGHT}}"
 
 # Function to check if iTerm is running
 check_iterm() {
@@ -59,7 +68,7 @@ end tell
 EOF
 
 # Wait for the backend process to fully start
-sleep 10
+sleep 12
 
 # AppleScript to tail the log file
 osascript <<EOF
