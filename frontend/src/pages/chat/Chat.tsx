@@ -178,6 +178,7 @@ const Chat = () => {
                                         onChange={(e) => setParticipantCode((e.target as HTMLInputElement).value)}
                                         // placeholder="E.g. undergraduate, master's degree, PhD, etc."
                                         placeholder="To be provided"
+                                        aria-label="Participant Code"
                                     />
                                 </div>
                                 {/* <li className={styles.contextChatContainer}>Your role within the LSE: </li> */}
@@ -190,6 +191,7 @@ const Chat = () => {
                                         onChange={(e) => setRoleInfo((e.target as HTMLInputElement).value)}
                                         //placeholder="E.g. student, teaching staff, professional service staff, etc."
                                         placeholder="e.g. professional service staff etc."
+                                        aria-label="Role"
                                     />
                                 </div>
                                 <li className={styles.contextChatContainer}>Affiliation: </li>
@@ -201,6 +203,7 @@ const Chat = () => {
                                         value={AffiliationInfo}
                                         onChange={(e) => setAffiliationInfo((e.target as HTMLInputElement).value)}
                                         placeholder="e.g. division, academic department etc."
+                                        aria-label="Affiliation"
                                     />
                                 </div>
                                 {/* <li className={styles.contextChatContainer}>If applicable, your level of study: </li>
@@ -278,9 +281,10 @@ const Chat = () => {
                     <div className={styles.chatInput}>
                         <QuestionInput
                             clearOnSend
-                            placeholder="Type a new question (e.g. how do I file a complaint?)"
+                            placeholder="Type a new question (e.g. how do I book annual leave?)"
                             disabled={isLoading}
                             onSend={question => makeApiRequest(question)}
+                            aria-label="Affiliation"
                         />
                     </div>
                 </div>
