@@ -190,7 +190,7 @@ const Chat = () => {
                                         value={RoleInfo}
                                         onChange={(e) => setRoleInfo((e.target as HTMLInputElement).value)}
                                         //placeholder="E.g. student, teaching staff, professional service staff, etc."
-                                        placeholder="e.g. professional service staff etc."
+                                        placeholder="e.g. DTS staff"
                                         aria-label="Role"
                                     />
                                 </div>
@@ -202,7 +202,7 @@ const Chat = () => {
                                         borderless
                                         value={AffiliationInfo}
                                         onChange={(e) => setAffiliationInfo((e.target as HTMLInputElement).value)}
-                                        placeholder="e.g. division, academic department etc."
+                                        placeholder="e.g. Solutions and Partnering"
                                         aria-label="Affiliation"
                                     />
                                 </div>
