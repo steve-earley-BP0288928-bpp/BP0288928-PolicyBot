@@ -24,11 +24,13 @@ AZURE_OPENAI_CHAT_MODEL = os.getenv("AZURE_OPENAI_CHAT_MODEL")
 AZURE_OPENAI_CHAT_MODEL_VERSION = os.getenv("AZURE_OPENAI_CHAT_MODEL_VERSION")
 EMBED_MODEL = os.getenv("EMBED_MODEL")
 
+EMBED_MODEL_INSTANCE = HuggingFaceEmbedding(EMBED_MODEL)
+
 #### Util Functions ####
 
 
 async def compute_text_embedding(
-    q: str, embed_model: str = EMBED_MODEL, model_instance=None
+    q: str, embed_model: str = EMBED_MODEL, model_instance=EMBED_MODEL_INSTANCE
 ):
     if not model_instance:
         model_instance = HuggingFaceEmbedding(model_name=embed_model)
@@ -38,7 +40,7 @@ async def compute_text_embedding(
 
 
 def compute_text_embedding_sync(
-    q: str, embed_model: str = EMBED_MODEL, model_instance=None
+    q: str, embed_model: str = EMBED_MODEL, model_instance=EMBED_MODEL_INSTANCE
 ):
     if not model_instance:
         model_instance = HuggingFaceEmbedding(model_name=embed_model)
@@ -48,7 +50,7 @@ def compute_text_embedding_sync(
 
 
 def summarise_and_embed_sync(
-    doc: str, chat_model: str = AZURE_OPENAI_CHAT_MODEL, chat_end_point: str = AZURE_OPENAI_ENDPOINT, embed_model: str = EMBED_MODEL, chat_model_instance=None, embed_model_instance=None
+    doc: str, chat_model: str = AZURE_OPENAI_CHAT_MODEL, chat_end_point: str = AZURE_OPENAI_ENDPOINT, embed_model: str = EMBED_MODEL, chat_model_instance=None, embed_model_instance=EMBED_MODEL_INSTANCE
 ):
     if not chat_model_instance:
         # chat_model_instance = openai.OpenAI(
