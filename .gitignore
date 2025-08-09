@@ -314,3 +314,5 @@ analysis/output.csv
 output.csv
 output_summary.csv
 data/error_downloads.jsonl
+data/ingested_data.json
+data/error_downloads.jsonl
