@@ -6,10 +6,11 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 LSE_USERNAME = os.environ["LSE_USERNAME"]
 LSE_PASSWORD = os.environ["LSE_PASSWORD"]
-DATA_FOLDER = '/Users/steve/chat-lse/offline_pdfs'
+DATA_FOLDER = '/Users/steve/chat-lse/data/offline_pdfs'
 
 # Get the list of files that the crawler was unable to download
-with open('data/error_downloads.jsonl', 'r') as file_list:
+# with open('data/error_downloads.jsonl', 'r') as file_list:
+with open('data/pdf_list.txt', 'r') as file_list:
 
     for line in file_list:
         # Clean the url
@@ -35,7 +36,7 @@ with open('data/error_downloads.jsonl', 'r') as file_list:
                                     print(
                                         f'File downloaded successfully: {url}')
                             except FileExistsError:
-                                # print(f'File already downloaded: {url}')
+                                print(f'File already downloaded: {url}')
                                 pass
 
                         else:
