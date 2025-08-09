@@ -152,7 +152,8 @@ class AdvancedRAGChat:
             model=self.chat_model,
             temperature=0,  # Minimize creativity for search query generation
             # Setting too low risks malformed JSON, setting too high may affect performance
-            max_tokens=100,
+            # 09-AUG-202 changed from 100 to 1024
+            max_tokens=1024,
             n=1,
             tools=build_filter_function(),
             tool_choice="required",
@@ -535,13 +536,23 @@ class QueryRewriterRAG(AdvancedRAGChat):
         Takes the user query (`original_user_query`) and past messages (`past_messages`), using function calling to ask the model 
         to decide which categories the user query fits in, and returns how the model would handle the query.  
         """
+        # Issue encountered where openai_messages_token_helper expects original_user_query to be a string not a list
+        # Join the list into a single string
+        if isinstance(original_user_query, list):
+            clean_user_query = " ".join(str(item)
+                                        for item in original_user_query)
+        else:
+            clean_user_query = str(original_user_query)
+
         # Generate prompt that asks the model to first classify the query before answering
         query_messages = build_messages(
             model=self.chat_model,
             system_prompt=self.query_prompt_template,
-            new_user_content=original_user_query,
+            # new_user_content=original_user_query,
+            new_user_content=clean_user_query,
             # Only include 1 past message to avoid long context distracting model decision-making
-            past_messages=[past_messages[-1]] if past_messages else [],
+            # past_messages=[past_messages[-1]] if past_messages else [],
+            past_messages=[],
             max_tokens=self.chat_token_limit - query_response_token_limit,
             fallback_to_default=True,
         )
@@ -551,7 +562,8 @@ class QueryRewriterRAG(AdvancedRAGChat):
             model=self.chat_model,
             temperature=0,  # Minimize creativity for search query generation
             # Setting too low risks malformed JSON, setting too high may affect performance
-            max_tokens=100,
+            # 09-AUG-2025 changed from 100 to 1024
+            max_tokens=1024,
             n=1,
             tools=build_filter_function_query_rewriter(),
             tool_choice="required",
@@ -635,8 +647,17 @@ class QueryRewriterRAG(AdvancedRAGChat):
 
                 logger.info(
                     f"Entering vector search with query text: {search_query}")
+
+                # Issue encountered where a string is expected but getting a list
+                # Join the list into a single string
+                if isinstance(search_query, list):
+                    clean_search_query = " ".join(str(item)
+                                                  for item in search_query)
+                else:
+                    clean_search_query = str(search_query)
+
                 vector = await compute_text_embedding(
-                    search_query,
+                    clean_search_query,
                     None,
                     self.embed_model
                 )
