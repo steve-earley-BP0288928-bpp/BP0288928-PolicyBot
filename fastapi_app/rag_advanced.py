@@ -643,7 +643,14 @@ class QueryRewriterRAG(AdvancedRAGChat):
                         context_sentence += f"from {affiliation.rstrip()}. "
 
                     if role or affiliation or participant:
-                        search_query = context_sentence+search_query
+                        # Issue encountered where can only concatenate str (not "list") to str
+                        # Join the list into a single string
+                        if isinstance(search_query, list):
+                            clean_search_query = " ".join(
+                                str(item) for item in search_query)
+                        else:
+                            clean_search_query = str(search_query)
+                        search_query = context_sentence+clean_search_query
 
                 logger.info(
                     f"Entering vector search with query text: {search_query}")
