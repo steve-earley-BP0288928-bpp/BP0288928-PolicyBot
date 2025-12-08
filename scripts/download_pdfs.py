@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 LSE_USERNAME = os.environ["LSE_USERNAME"]
 LSE_PASSWORD = os.environ["LSE_PASSWORD"]
-DATA_FOLDER = '/Users/steve/chat-lse/data/offline_pdfs'
+DATA_FOLDER = os.environ["OFFLINE_PDFS_DIR"]
 
 # Get the list of files that the crawler was unable to download
 # with open('data/error_downloads.jsonl', 'r') as file_list:

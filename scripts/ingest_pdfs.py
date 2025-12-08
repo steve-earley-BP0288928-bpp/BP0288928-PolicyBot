@@ -18,7 +18,7 @@ conn = engine.connect()
 BASE_DIR = Path(__file__).parents[1]
 
 # Local directory holding copies of PDF documents to ingest
-OFFLINE_PDFS_DIR = 'data/offline_pdfs'
+DATA_FOLDER = os.environ["OFFLINE_PDFS_DIR"]
 
 
 def process_pdf(pdf_file_path):
@@ -80,7 +80,7 @@ def process_pdf(pdf_file_path):
 
 
 # Full directory path for location of PDFs
-DIR = os.path.join(BASE_DIR, OFFLINE_PDFS_DIR)
+DIR = os.path.join(BASE_DIR, DATA_FOLDER)
 
 # List of all the PDFs to ingest
 pdf_files = list(Path(DIR).rglob('*.pdf'))
