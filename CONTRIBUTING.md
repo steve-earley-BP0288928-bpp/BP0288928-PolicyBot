@@ -1,16 +1,22 @@
-# Contributing to _ChatLSE_
+# Contributing to _PolicyBot_
 
 ## Introduction
 
-The Chat LSE Project is based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project with modifictaions to adapt to LSE's development and production environment.
+The _PolicyBot_ project is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi) which itself is based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project.
 
-Major modifications are: 
+Major modifications made in this fork are:
 
-- Removed all Azure components
-- Removed all VSCode-related configurations
-- Removed dependency on close-sourced OpenAI chat and embedding models
+- Altered to use Azure OpenAI service
+- Altered LLM prompts to focus on providing policy assistance to LSE staff
+- Added process for ingesting additional PDF documents
 
-The code has been tested on Windows 11, Ubuntu 20.04 LTS and MacOS(M2).
+Minor modifications made in this fork are:
+
+- Altered user interface to reflect specific purpose of _PolicyBot_
+- Altered logging approach to create date-based logs with additional information logged
+- Resolved a TypeError issue in the main chat function
+
+The code has been fully tested on MacOS(Intel and M1) and partially tested on Ubuntu 22.04 LTS.
 
 ## Architecture and structure
 
@@ -35,7 +41,7 @@ Make sure the following software are properly installed on your OS:
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 ## Table of Content 
-- [Contributing to _ChatLSE_](#contributing-to-chatlse)
+- [Contributing to _PolicyBot_](#contributing-to-policybot)
   - [Introduction](#introduction)
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
