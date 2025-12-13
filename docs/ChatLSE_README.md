@@ -7,18 +7,19 @@ _Total Contributors:_
 
 **Table of Contents:**
 
-  - [About the Project](#-about-the-project)
-  - [The Team](#-the-team)
-  - [Contributing](#-contributing)
-  - [Get in Touch](#%EF%B8%8F-get-in-touch)
-  - [Contributors](#-contributors)
+- [💬 ChatLSE](#-chatlse)
+  - [💡 About the Project](#-about-the-project)
+  - [🧑‍💻 The Team](#-the-team)
+  - [🔧 Contributing](#-contributing)
+  - [✉️ Get in Touch](#️-get-in-touch)
+  - [✨ Contributors](#-contributors)
 
 ## 💡 About the Project
 The _ChatLSE_ project is a proof of concept of a full data pipeline to index data from LSE websites. In this project, we gathered all public LSE documents and webpages into a database and then develop a chat interface using an LLM. Think of it as a ChatGPT meant to be particularly knowledgeable of LSE documents. Utilising retrieval augmented generation (RAG), the ChatLSE chatbot is capable of answering queries from staff and students by consulting relevant LSE documents and regulations. 
 
 As all parts of this application are completely open-source, this project also aims to serve as a blueprint for a fully open-source RAG solution. The full workflow of the project is illustrated below: 
 
-![Overall workflow of the project](img/app_workflow.png)
+![Overall workflow of the project](/img/app_workflow.png)
 
 The workflow improves upon vanilla implementations of RAG by adding components of query rewriter and query classifier. They ensure that the chatbot behaves more naturally when interacting with users, being able to handle follow-up questions by referring to previous context and knowing when to deny answering questions that are out of the scope of its intended usage. 
 
@@ -36,7 +37,7 @@ Please see the [Contributors Table](#-contributors) for the GitHub profiles of a
 
 _This repository is always a work in progress and **everyone** is encouraged to help us build something that is useful to the many._
 
-Everyone who joins the project should check out our [contributing guidelines](CONTRIBUTING.md) for more information on how to get started.
+Everyone who joins the project should check out our [contributing guidelines](ChatLSE_CONTRIBUTING.md) for more information on how to get started.
 
 Community members are provided with opportunities to learn new skills, share their ideas and collaborate with others.
 

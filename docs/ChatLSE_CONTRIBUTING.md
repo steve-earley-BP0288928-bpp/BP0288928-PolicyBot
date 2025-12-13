@@ -16,7 +16,7 @@ The code has been tested on Windows 11, Ubuntu 20.04 LTS and MacOS(M2).
 
 The overall architecture of the app is shown in the figure:
 
-![arch](img/arch.png "Architecture of the app")
+![arch](/img/arch.png "Architecture of the app")
 
 There are 4 main components, the Frontend APP (FluentUI, React JS), the backend APP (FastAPI), PostgreSQL database and Ollama service. 
 
