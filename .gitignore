@@ -296,23 +296,17 @@ dist
 ##### CUSTOM #####
 
 data/
+logs/
 static/
 offline_pdfs/
 
-.vscode
 .DS_Store
-data/error_downloads.jsonl
-data/error_downloads.jsonl
-download_log
-data/error_downloads.jsonl
-data/ingested_data.json
-app.log.orig
-data/ingested_data.json
-data/error_downloads.jsonl
-scripts/parsed_logs.csv
+.vscode
 analysis/output.csv
-output.csv
-output_summary.csv
+app.log.orig
 data/error_downloads.jsonl
 data/ingested_data.json
-data/error_downloads.jsonl
+download_log
+output_summary.csv
+output.csv
+scripts/parsed_logs.csv
