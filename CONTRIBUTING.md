@@ -2,54 +2,63 @@
 
 ## Introduction
 
-The _PolicyBot_ project is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi) which itself is based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project.
+The _PolicyBot_ project is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi), which itself was based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project.
 
-Major modifications made in this fork are:
+Major modifications made:
 
 - Altered to use Azure OpenAI service
 - Altered LLM prompts to focus on providing policy assistance to LSE staff
 - Added process for ingesting additional PDF documents
 
-Minor modifications made in this fork are:
+Minor modifications made:
 
-- Altered user interface to reflect specific purpose of _PolicyBot_
+- Altered user interface to reflect the specific purpose of _PolicyBot_
 - Altered logging approach to create date-based logs with additional information logged
 - Resolved a TypeError issue in the main chat function
 
-The code has been fully tested on MacOS(Intel and M1) and partially tested on Ubuntu 22.04 LTS.
+The code has been fully tested on MacOS (Intel and M2) and partially tested on Ubuntu 22.04 LTS.
 
 ## Architecture and structure
 
-The overall architecture of the app is shown in the figure:
+The high-level architecture of the _PolicyBot_ application is shown here:
 
-![arch](/img/arch.png "Architecture of the app")
+![High-level architecture of the PolicyBot application](/img/PolicyBot_simple_architecture.png "High-level architecture of the PolicyBot application")
 
-There are 4 main components, the Frontend APP (FluentUI, React JS), the backend APP (FastAPI), PostgreSQL database and Ollama service. 
+There are four main components:
 
-To run the full app, all four components have to be setup properly either on a local development machine or on a remote server. 
+- The Frontend of the _PolicyBot_ web app, built using [ReactJS](https://react.dev/) and [FluentUI](https://github.com/microsoft/fluentui).
+- The Backend of the web app, built using [FastAPI](https://fastapi.tiangolo.com/) and Python.
+- A [PostgreSQL](https://www.postgresql.org/) database, deployed locally using [Docker](https://www.docker.com/).
+- A chat model, deployed remotely using [Azure OpenAI](https://ai.azure.com/) service.
 
-For development purpose, the frontend APP, backend APP should always be setup on a local machine. 
+The application also uses a [local embedding model](https://developers.llamaindex.ai/python/examples/embeddings/huggingface/) in Python.
 
-PostgreSQL and Ollama could be setup locally or use a remote setup. 
+A scripted process, using [Crawley](https://github.com/elixir-crawly/crawly), is used to populate the database with documents scraped from the [LSE website](https://www.lse.ac.uk/). An additional process is used to ingest locally-stored PDF documents.
+
+To run the application all four components must be installed and configured correctly. For development purposes both components of the web app - the Frontend and Backend - should be colocated. The database can optionally be installed on a remote service e.g. in [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/products/postgresql).
 
 ## Requirements
 
-Make sure the following software are properly installed on your OS: 
+The following software needs to be installed on your development machine before proceeding: 
 
-- [VSCode](https://code.visualstudio.com/)
-- [Docker](https://docs.docker.com/engine/install/)
+- [Conda](https://anaconda.org/) (or equivalent package manager - Conda is assumed here)
+- [Docker](https://docs.docker.com/desktop/)
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [VSCode](https://code.visualstudio.com/) (or your preferred IDE)
 
-## Table of Content 
+You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be confifured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
+
+## Table of contents
 - [Contributing to _PolicyBot_](#contributing-to-policybot)
   - [Introduction](#introduction)
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
-  - [Table of Content](#table-of-content)
+  - [Table of contents](#table-of-contents)
   - [1. Setup PostgreSQL locally](#1-setup-postgresql-locally)
   - [2. (Optionally) Setup Ollama locally](#2-optionally-setup-ollama-locally)
   - [3. Setup environment](#3-setup-environment)
     - [3.1 Install Python dependencies](#31-install-python-dependencies)
+    - [Set up the Azure OPenAI service HERE](#set-up-the-azure-openai-service-here)
     - [3.2 Config environment variables](#32-config-environment-variables)
       - [Set Postgres Host](#set-postgres-host)
       - [Set Ollama Host](#set-ollama-host)
@@ -62,6 +71,9 @@ Make sure the following software are properly installed on your OS:
     - [6.1 Install npm dependencies](#61-install-npm-dependencies)
     - [6.2 Start the frontend APP](#62-start-the-frontend-app)
   - [6.3 Use the APP](#63-use-the-app)
+
+
+The following instructions assume MacOS is being used)
 
 ## 1. Setup PostgreSQL locally
 
@@ -122,6 +134,9 @@ Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
+
+### Set up the Azure OPenAI service HERE
+
 
 ### 3.2 Config environment variables
 
