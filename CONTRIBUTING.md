@@ -9,32 +9,24 @@ Adapted and updated from the original [ChatLSE CONTRIBUTING](/docs/ChatLSE_CONTR
   - [Introduction](#introduction)
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
+  - [Initial implementation](#initial-implementation)
   - [Clone the project](#clone-the-project)
   - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
   - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
-<<<<<<< Updated upstream
   - [Add a model deployment in Azure OpenAI service](#add-a-model-deployment-in-azure-openai-service)
   - [Configure environment variables](#configure-environment-variables)
     - [PostgreSQL](#postgresql)
     - [Azure OpenAI](#azure-openai)
     - [Hugging Face](#hugging-face)
-  - [4. Initialise the database](#4-initialise-the-database)
-    - [4.1 Run crawler to populate database](#41-run-crawler-to-populate-database)
-=======
-    - [Set up the Azure OPenAI service HERE](#set-up-the-azure-openai-service-here)
-    - [3.2 Config environment variables](#32-config-environment-variables)
-      - [Set Postgres Host](#set-postgres-host)
-      - [Set Huggingface Access Token](#set-huggingface-access-token)
   - [Populate the database](#populate-the-database)
     - [Remote content](#remote-content)
     - [Local content](#local-content)
->>>>>>> Stashed changes
-    - [4.2 Run the embedding script](#42-run-the-embedding-script)
-  - [5. Start the FastAPI APP](#5-start-the-fastapi-app)
-  - [6. Setup and run Frontend APP](#6-setup-and-run-frontend-app)
-    - [6.1 Install npm dependencies](#61-install-npm-dependencies)
-    - [6.2 Start the frontend APP](#62-start-the-frontend-app)
-  - [6.3 Use the APP](#63-use-the-app)
+    - [Generate embeddings](#generate-embeddings)
+  - [Start the backend of the web app](#start-the-backend-of-the-web-app)
+  - [Set up and start the frontend of the web app](#set-up-and-start-the-frontend-of-the-web-app)
+    - [Install npm dependencies](#install-npm-dependencies)
+    - [Start the frontend](#start-the-frontend)
+  - [Test the web app](#test-the-web-app)
 
 ## Introduction
 
@@ -62,8 +54,8 @@ The high-level architecture of the _PolicyBot_ application is shown here:
 
 There are four main components:
 
-- The Frontend of the _PolicyBot_ web app, built using [ReactJS](https://react.dev/) and [FluentUI](https://github.com/microsoft/fluentui).
-- The Backend of the web app, built using [FastAPI](https://fastapi.tiangolo.com/) and Python.
+- The frontend of the _PolicyBot_ web app, built using [ReactJS](https://react.dev/) and [FluentUI](https://github.com/microsoft/fluentui).
+- The backend of the web app, built using [FastAPI](https://fastapi.tiangolo.com/) and Python.
 - A [PostgreSQL](https://www.postgresql.org/) database, deployed locally using [Docker](https://www.docker.com/).
 - A chat model, deployed remotely using [Azure OpenAI](https://ai.azure.com/) service.
 
@@ -79,12 +71,19 @@ The following software needs to be installed on your development machine before 
 
 - [Conda](https://anaconda.org/) (or equivalent package manager - Conda is assumed here)
 - [Docker](https://docs.docker.com/desktop/)
+- [nvm](https://github.com/nvm-sh/nvm)
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Node.js](https://nodejs.org/en/download/)
 - [VSCode](https://code.visualstudio.com/) (or your preferred IDE)
 
 These instructions assume MacOS is being used.
 
 You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be confifured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
+
+## Initial implementation
+
+GETTING STARTED
+
 
 ## Clone the project
 
@@ -164,6 +163,8 @@ You will need details from the model deployment later.
 
 Copy the file `.env.sample` into `.env`.
 
+As the `.env` file will hold secrets such as API keys it is gitignored.
+
 ### PostgreSQL
 
 The environment variables relating to the PostgeSQL database can be left with their default values:
@@ -189,7 +190,7 @@ The environment variables relating to Azure OpenAI and the chat model deployment
 AZURE_OPENAI_ENDPOINT=https://<resourcename>.openai.azure.com
 AZURE_OPENAI_API_KEY=<your API key>
 AZURE_OPENAI_CHAT_MODEL=gpt-4.1 # for example
-AZURE_OPENAI_CHAT_MODEL_VERSION=2025-04-14 # for example
+AZURE_OPENAI_CHAT_MODEL_VERSION=2024-12-01-preview # for example
 ```
 
 ### Hugging Face
@@ -229,77 +230,133 @@ Note that it is safe to interupt and restart the script.
 
 ### Local content
 
+Create or identify a local directory for storing PDF documents to ingest to the database. This can be any accessible directory including, for example, a locally synchronised folder from OneDrive.
 
+Set the `OFFLINE_PDFS_DIR` environment variable with the path to the directory:
 
-
-
-
-### 4.2 Run the embedding script
-
-Set up embedding type in the **.env** file: 
-
+```bash
+# Local directory holding copies of PDF documents to ingest
+OFFLINE_PDFS_DIR='
 ```
+
+Run this script to ingest the PDFs:
+
+```bash
+sh scripts/ingest_pdfs.sh 
+```
+
+The script can be run multiple times as it will only process documents that have changed compared to the versions in the database.
+
+Note that it is safe to interupt and restart the script.
+
+### Generate embeddings
+
+Define the required embedding type environment variable in the `.env file: 
+
+```bash
 # Select embedding type from ["simple_embeddings", "title_embeddings", "context_embeddings"]
 EMBEDDING_TYPE=title_embeddings
 ```
 
-The default setting is `title_embeddings` as our experiments show that it provides the best results. 
+The default setting is `title_embeddings` as the original _ChatLSE_ project found through experimentation that this embedding type provides the best results.
 
-The following script will take a while for the first time you run it as it generates embeddings for all the documents in the database. Subsequent runs of the embedding script should be quicker as it only updates the embeddings for the documents that has changed.
+Note that whilst the `simple_embeddings` and `title_embeddings` embedding types use the local embedding model, the `context_embeddings` embedding type additionally uses the remote chat model to summarise documents. This increases the time taken to generate embeddings and potentially incurs a considerable cost given the high token usage required.
 
-Run the following code to start the embedding script:
+Run this script to generate the embeddings:
 
 ```bash
 sh scripts/embed_db.sh
 ```
 
-## 5. Start the FastAPI APP
+You will see the script outputting something like this:
+```
+2025-12-14 17:22:23,870 INFO sqlalchemy.engine.Engine
+                UPDATE lse_doc SET title_embeddings = %(title_embeddings)s WHERE id = %(id)s
 
-We need our API to be running in the background, to handle requests from the website to LLAMA and Postgres:
+INFO:sqlalchemy.engine.Engine:
+                UPDATE lse_doc SET title_embeddings = %(title_embeddings)s WHERE id = %(id)s
 
-```bash 
-sh ./scripts/start_fastapi_app.sh
+2025-12-14 17:22:23,870 INFO sqlalchemy.engine.Engine [generated in 0.00034s] {'title_embeddings': [0.007386937737464905, -0.010910234414041042, -0.03177380934357643, -0.0029778603930026293, -0.011845835484564304, 0.011221017688512802, 0.00649735145 ... (22397 characters truncated) ... .06648965924978256, 0.0506301186978817, 0.05630011111497879, -0.011488036252558231, -0.02514929324388504, -0.015085604973137379, 0.016696428880095482], 'id': 'ea50b4c2c790dce7a78046ae639a310a_0'}
+INFO:sqlalchemy.engine.Engine:[generated in 0.00034s] {'title_embeddings': [0.007386937737464905, -0.010910234414041042, -0.03177380934357643, -0.0029778603930026293, -0.011845835484564304, 0.011221017688512802, 0.00649735145 ... (22397 characters truncated) ... .06648965924978256, 0.0506301186978817, 0.05630011111497879, -0.011488036252558231, -0.02514929324388504, -0.015085604973137379, 0.016696428880095482], 'id': 'ea50b4c2c790dce7a78046ae639a310a_0'}
+2025-12-14 17:22:23,885 INFO sqlalchemy.engine.Engine COMMIT
+INFO:sqlalchemy.engine.Engine:COMMIT
+INFO:ragapp:Embedding calculated and updated for id: ea50b4c2c790dce7a78046ae639a310a_0
+INFO:ragapp:Embedding chunk 1/3057
+INFO:ragapp:Embedding chunks...
 ```
 
-You should see something like:
+The script will take a considerable amount of time to complete when it is first run. Subsequent runs will be quicker as it will only generate embeddings for files or documents that have changed compared to the versions in the database.
+
+Note that it is safe to interupt and restart the script.
+
+## Start the backend of the web app
+
+The backend of the web app provides an API that handles requests from the frontend. It needs to be running before the frontend can be started.
+
+Run this script to start the backend:
+
+```bash 
+sh scripts/start_backend.sh
+```
+
+You should see something like this:
 
 ```bash
-INFO:     Will watch for changes in these directories: ['<your-path-to>/chat-lse']
+INFO:     Will watch for changes in these directories: ['<your-path-to>/policybot']
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [7609] using WatchFiles
+INFO:     Started reloader process [4665] using WatchFiles
+[nltk_data] Downloading package punkt_tab to
+[nltk_data]     /opt/anaconda3/envs/policybot/lib/python3.11/site-
+[nltk_data]     packages/llama_index/core/_static/nltk_cache...
+[nltk_data]   Package punkt_tab is already up-to-date!
+INFO:ragapp:Start API ...
+INFO:ragapp:ChatClass: QueryRewriterRAG
 WARNING:  ASGI app factory detected. Using it, but please consider setting the --factory flag explicitly.
-INFO:     Started server process [7611]
+INFO:     Started server process [4672]
 INFO:     Waiting for application startup.
-INFO:ragapp:Authenticating to PostgreSQL using password...
-INFO:ragapp:Authenticating to OpenAI using Ollama...
-INFO:ragapp:Authenticating to OpenAI using Ollama...
+INFO:ragapp:Creating AsyncAzureOpenAI Chat Client
+INFO:ragapp:Chat Client: <openai.lib.azure.AsyncAzureOpenAI object at 0x175c6dfd0>
+INFO:ragapp:Chat Model Selected: gpt-4.1
+INFO:ragapp:Embedding Type: title_embeddings
+INFO:ragapp:With User Context: True
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: thenlper/gte-large
+INFO:ragapp:Embed Model Selected: model_name='thenlper/gte-large' embed_batch_size=10 callback_manager=<llama_index.core.callbacks.base.CallbackManager object at 0x1779f9cd0> num_workers=None max_length=512 normalize=True query_instruction=None text_instruction=None cache_folder=None
 INFO:     Application startup complete.
 ```
 
-## 6. Setup and run Frontend APP
+## Set up and start the frontend of the web app
 
-### 6.1 Install npm dependencies
+### Install npm dependencies
+
+Open a new Terminal/CLI session and run the following:
 
 ```bash
-# Go to chat-lse/frontend
+# go to ~policybot/frontend
 cd frontend 
 npm install
 ```
 
-You might see the following warning. We can ignore it for now.
+You might something like the following warning:
 
 ```bash
-1 moderate severity vulnerability
+added 264 packages, and audited 265 packages in 16s
 
-To address all issues, run:
+10 vulnerabilities (8 moderate, 2 high)
+
+To address issues that do not require attention, run:
   npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
 
 Run `npm audit` for details.
 ```
 
-### 6.2 Start the frontend APP
+Depending on the number and nature of the vulnerabilities reported you can fix these now or later, using the commands indicated.
 
-Open a new terminal and run:
+### Start the frontend
+
+Run the following:
 
 ```bash
 # Go to chat-lse/frontend
@@ -314,13 +371,17 @@ You should see something like:
 > vite
 
 
-  VITE v4.5.2  ready in 309 ms
+  VITE v7.2.7  ready in 797 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
-  ➜  press h to show help
+  ➜  press h + enter to show help
 ```
 
-## 6.3 Use the APP
+## Test the web app
 
-Open http://localhost:5173/ in the web browser to try the app.
+Using a web browser open the following URL:
+
+`http://localhost:5173/`
+
+
