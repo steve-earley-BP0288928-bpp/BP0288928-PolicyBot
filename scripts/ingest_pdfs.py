@@ -5,8 +5,6 @@ from sqlalchemy import text
 from chatlse.postgres_engine import create_postgres_engine_from_env_sync
 from chatlse.crawler import parse_doc, generate_json_entry, generate_list_ingested_data
 from datetime import datetime
-
-import pylibmagic
 import magic
 
 load_dotenv(override=True)
