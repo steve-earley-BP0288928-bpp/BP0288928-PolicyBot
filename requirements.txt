@@ -24,6 +24,8 @@ psycopg2-binary==2.9.9
 ollama==0.2.1
 llama-index==0.10.32
 llama-index.embeddings.huggingface==0.2.2
+huggingface-hub==0.33.4
+hf-xet==1.1.5
 
 # VSCode dependencies
 ipykernel==6.29.4
