@@ -9,10 +9,11 @@
   - [Clone the project](#clone-the-project)
   - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
   - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
-    - [Set up the Azure OPenAI service HERE](#set-up-the-azure-openai-service-here)
-    - [3.2 Config environment variables](#32-config-environment-variables)
-      - [Set Postgres Host](#set-postgres-host)
-      - [Set Huggingface Access Token](#set-huggingface-access-token)
+  - [Add a model deployment in Azure OpenAI service](#add-a-model-deployment-in-azure-openai-service)
+  - [Configure environment variables](#configure-environment-variables)
+    - [PostgreSQL](#postgresql)
+    - [Azure OpenAI](#azure-openai)
+    - [Hugging Face](#hugging-face)
   - [4. Initialise the database](#4-initialise-the-database)
     - [4.1 Run crawler to populate database](#41-run-crawler-to-populate-database)
     - [4.2 Run the embedding script](#42-run-the-embedding-script)
@@ -68,9 +69,9 @@ The following software needs to be installed on your development machine before 
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 - [VSCode](https://code.visualstudio.com/) (or your preferred IDE)
 
-You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be confifured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
+These instructions assume MacOS is being used.
 
-The following instructions assume MacOS is being used.
+You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be confifured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
 
 ## Clone the project
 
@@ -102,6 +103,8 @@ $ docker container run -itd --name policybot-postgres --restart unless-stopped -
 ```
 
 Note that this uses a Docker image of PostgreSQL database with the [pgvector](https://github.com/pgvector/pgvector) extension.
+
+The database name and credentials for the database account can be changed as required.
 
 To verify the container is running:
 
@@ -136,31 +139,56 @@ Install Python dependencies:
 pip install -r requirements.txt
 ```
 
-### Set up the Azure OPenAI service HERE
+## Add a model deployment in Azure OpenAI service
 
+Go to [Azure OpenAI](https://ai.azure.com/) service.
 
-### 3.2 Config environment variables
+Navigate to `Shared resources > Deployments` and deploy a model suitable for chat completions and responses, for example `gpt-4.1`.
 
-Copy **.env.sample** into **.env**.
+You will need details from the model deployment later.
 
-#### Set Postgres Host
+## Configure environment variables
 
-```
-# For local setup
+Copy the file `.env.sample` into `.env`.
+
+### PostgreSQL
+
+The environment variables relating to the PostgeSQL database can be left with their default values:
+
+```bash
 POSTGRES_HOST=localhost
+POSTGRES_USERNAME=policybot
+POSTGRES_PASSWORD=policybot
+POSTGRES_DATABASE=policybot
+POSTGRES_SSL=disable
+POSTGRES_PORT=5432
 ```
 
-```
-# Remote setup, for testing and deployment only
-POSTGRES_HOST=<Host IP address>
+If the database name, username or password were changed when the database was deployed in Docker then the environment variables should be set as required.
+
+If the PostgreSQL database is installed on a remote host then `POSTGRES_HOST` should be changed to reflect the IP address or URL as appropriate.
+
+### Azure OpenAI
+
+The environment variables relating to Azure OpenAI and the chat model deployment need to be set:
+
+```bash
+AZURE_OPENAI_ENDPOINT=https://<resourcename>.openai.azure.com
+AZURE_OPENAI_API_KEY=<your API key>
+AZURE_OPENAI_CHAT_MODEL=gpt-4.1 # for example
+AZURE_OPENAI_CHAT_MODEL_VERSION=2025-04-14 # for example
 ```
 
+### Hugging Face
 
-#### Set Huggingface Access Token
+An access token is needed to access the `thenlper/gte-large` embedding model.
 
-```
-# Required for access to thenlper/gte-large
-HF_TOKEN=<obtain access token from Huggingface>
+Go to [Hugging Face](https://huggingface.co/) (create an account as needed) and generate an access token named e.g. `policybot`.
+
+Set the `HF_TOKEN` environment variable:
+
+```bash
+HF_TOKEN=<your Hugging Face access token>
 ```
 
 ## 4. Initialise the database
