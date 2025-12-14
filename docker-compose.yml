@@ -18,14 +18,14 @@ services:
               device_ids: ['1']
               capabilities: [gpu]
   db:
-    container_name: chatlse-postgres
+    container_name: policybot-postgres
     image: pgvector/pgvector:0.7.1-pg16
     ports:
       - "5433:5432"
     restart: "always"
     environment:
-      - POSTGRES_DB=chatlse
-      - POSTGRES_USER=chatlse
+      - POSTGRES_DB=policybot
+      - POSTGRES_USER=policybot
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - /mnt/data/chat_lse/data/prod/postgres-data:/var/lib/postgresql/data
