@@ -1,5 +1,8 @@
 # Contributing to _PolicyBot_
 
+Adapted and updated from the original [ChatLSE CONTRIBUTING](/docs/ChatLSE_CONTRIBUTING.md) document.
+
+
 ## Table of contents
 - [Contributing to _PolicyBot_](#contributing-to-policybot)
   - [Table of contents](#table-of-contents)
@@ -9,6 +12,7 @@
   - [Clone the project](#clone-the-project)
   - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
   - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
+<<<<<<< Updated upstream
   - [Add a model deployment in Azure OpenAI service](#add-a-model-deployment-in-azure-openai-service)
   - [Configure environment variables](#configure-environment-variables)
     - [PostgreSQL](#postgresql)
@@ -16,6 +20,15 @@
     - [Hugging Face](#hugging-face)
   - [4. Initialise the database](#4-initialise-the-database)
     - [4.1 Run crawler to populate database](#41-run-crawler-to-populate-database)
+=======
+    - [Set up the Azure OPenAI service HERE](#set-up-the-azure-openai-service-here)
+    - [3.2 Config environment variables](#32-config-environment-variables)
+      - [Set Postgres Host](#set-postgres-host)
+      - [Set Huggingface Access Token](#set-huggingface-access-token)
+  - [Populate the database](#populate-the-database)
+    - [Remote content](#remote-content)
+    - [Local content](#local-content)
+>>>>>>> Stashed changes
     - [4.2 Run the embedding script](#42-run-the-embedding-script)
   - [5. Start the FastAPI APP](#5-start-the-fastapi-app)
   - [6. Setup and run Frontend APP](#6-setup-and-run-frontend-app)
@@ -191,17 +204,35 @@ Set the `HF_TOKEN` environment variable:
 HF_TOKEN=<your Hugging Face access token>
 ```
 
-## 4. Initialise the database
+## Populate the database
 
-### 4.1 Run crawler to populate database 
+The database needs to be populated with content for _PolicyBot_ to use. This can be:
 
-The following script will take a while for the first time you run it as it crawls through all the files and webpages with lse.ac.uk domain name. Subsequent runs of the crawler should be quicker as it only updates the files and webpages that has changed. 
+- Remote content - HTML files and PDF documents that are publicly available on the LSE website.
+- Local content - PDF documents that are held in local storage.
 
-Run the following code to start the crawler :
+It is not essential to populate the database with both types of content. Additional content can be added to the database at any point. As _PolicyBot_ is a RAG-based chatbot how well it performs is related to the information it is able to reference for its responses.
+
+### Remote content
+
+Run this script to scrape content from the LSE website:
 
 ```bash
 sh scripts/start_crawlers.sh 
 ```
+
+The script runs one or more crawlers defined in the `spiders` directory of the project.
+
+The script will take a considerable amount of time to complete when it is first run. Subsequent runs will be quicker as it will only process files or documents that have changed compared to the versions in the database.
+
+Note that it is safe to interupt and restart the script.
+
+### Local content
+
+
+
+
+
 
 ### 4.2 Run the embedding script
 
