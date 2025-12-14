@@ -5,6 +5,9 @@
 requests==2.31.0
 scrapy==2.11.2
 
+# Local file collection
+python-magic==0.4.27
+
 # Data Manipulation
 pandas==2.2.2
 
