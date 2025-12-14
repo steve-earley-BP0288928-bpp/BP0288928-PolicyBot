@@ -28,4 +28,4 @@ services:
       - POSTGRES_USER=policybot
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - /mnt/data/chat_lse/data/prod/postgres-data:/var/lib/postgresql/data
+      - /mnt/data/policybot/data/prod/postgres-data:/var/lib/postgresql/data

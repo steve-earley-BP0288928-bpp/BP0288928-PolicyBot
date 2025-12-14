@@ -6,9 +6,9 @@
   - [Introduction](#introduction)
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
-  - [1. Setup PostgreSQL locally](#1-setup-postgresql-locally)
-  - [3. Setup environment](#3-setup-environment)
-    - [3.1 Install Python dependencies](#31-install-python-dependencies)
+  - [Clone the project](#clone-the-project)
+  - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
+  - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
     - [Set up the Azure OPenAI service HERE](#set-up-the-azure-openai-service-here)
     - [3.2 Config environment variables](#32-config-environment-variables)
       - [Set Postgres Host](#set-postgres-host)
@@ -72,48 +72,65 @@ You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/
 
 The following instructions assume MacOS is being used.
 
-## 1. Setup PostgreSQL locally
+## Clone the project
 
-Run PostrgeSQL using docker container:
+Clone the _PolicyBot_ project repository from GitHub:
 
 ```bash
-$ docker run -itd --name policybot-postgres --restart unless-stopped -p 5432:5432 -e POSTGRES_PASSWORD=policybot -e POSTGRES_USER=policybot -e POSTGRES_DB=policybot -d pgvector/pgvector:0.7.1-pg16
+$ git clone https://github.com/steve-earley-BP0288928-bpp/BP0288928-PolicyBot.git
 ```
 
-To verify the container is up and running:
+Not essential but for convenience create a symbolic link to the repository from your home directory, for example:
+
+```bash
+cd ~
+ln -s Documents/GitHub/BP0288928-PolicyBot/ policybot
+```
+
+The rest of the set up should be performed from the root of the project:
+
+```bash
+cd policybot
+```
+
+## Set up PostgreSQL database in Docker
+
+Run PostgreSQL in a Docker container:
+
+```bash
+$ docker container run -itd --name policybot-postgres --restart unless-stopped -p 5432:5432 -e POSTGRES_DB=policybot -e POSTGRES_USER=policybot -e POSTGRES_PASSWORD=policybot -d pgvector/pgvector:0.7.1-pg16
+```
+
+Note that this uses a Docker image of PostgreSQL database with the [pgvector](https://github.com/pgvector/pgvector) extension.
+
+To verify the container is running:
 
 ```bash
 $ docker ps -a
 
-CONTAINER ID   IMAGE                          COMMAND                  CREATED         STATUS         PORTS                                       NAMES
-45d7301f5ef8   pgvector/pgvector:0.7.1-pg16   "docker-entrypoint.s…"   2 seconds ago   Up 2 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   chatlse-postgres
+CONTAINER ID   IMAGE                          COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+6fb5ba57cdf9   pgvector/pgvector:0.7.1-pg16   "docker-entrypoint.s…"   43 seconds ago   Up 42 seconds   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   policybot-postgres
 ```
 
-The STATUS of the container shoule be something like "Up 2 seconds".
+The STATUS of the container should be something like "Up 42 seconds".
 
+## Set up Python virtual environment and dependencies
 
-## 3. Setup environment
-
-### 3.1 Install Python dependencies
-
-Open the terminal in VSCode by clicking on 'Terminal' -> 'New Terminal' and create a virtual environment. 
+Create and activate a virtual environment for PolicyBot (this uses conda but other virtual environments like venv could be used):
 
 ```bash
-# Use conda as an example. Can also use other virtual environments like venv
-
 conda create -n policybot python=3.11 ipython
-conda activate policybot # or the equivalent for your OS
+conda activate policybot
 ```
 
-(Important) Ensure that `pip` refers to the pip inside the conda environment we just created:
+**Important** - ensure that `pip` refers to the pip inside the conda environment just created:
 
 ```bash
 which pip
+/opt/anaconda3/envs/policybot/bin/pip
 ```
 
-This should output something like `/home/your-username/miniconda3/envs/chat-lse/bin/pip`
-
-Install dependencies 
+Install Python dependencies:
 
 ```bash
 pip install -r requirements.txt
