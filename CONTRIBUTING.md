@@ -10,23 +10,24 @@ Adapted and updated from the original [ChatLSE CONTRIBUTING](/docs/ChatLSE_CONTR
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
   - [Initial implementation](#initial-implementation)
-  - [Clone the project](#clone-the-project)
-  - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
-  - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
-  - [Add a model deployment in Azure OpenAI service](#add-a-model-deployment-in-azure-openai-service)
-  - [Configure environment variables](#configure-environment-variables)
-    - [PostgreSQL](#postgresql)
-    - [Azure OpenAI](#azure-openai)
-    - [Hugging Face](#hugging-face)
-  - [Populate the database](#populate-the-database)
-    - [Remote content](#remote-content)
-    - [Local content](#local-content)
-    - [Generate embeddings](#generate-embeddings)
-  - [Start the backend of the web app](#start-the-backend-of-the-web-app)
-  - [Set up and start the frontend of the web app](#set-up-and-start-the-frontend-of-the-web-app)
-    - [Install npm dependencies](#install-npm-dependencies)
-    - [Start the frontend](#start-the-frontend)
-  - [Test the web app](#test-the-web-app)
+    - [Clone the project](#clone-the-project)
+    - [Set up PostgreSQL database in Docker](#set-up-postgresql-database-in-docker)
+    - [Set up Python virtual environment and dependencies](#set-up-python-virtual-environment-and-dependencies)
+    - [Add a model deployment in Azure OpenAI service](#add-a-model-deployment-in-azure-openai-service)
+    - [Configure environment variables](#configure-environment-variables)
+      - [PostgreSQL](#postgresql)
+      - [Azure OpenAI](#azure-openai)
+      - [Hugging Face](#hugging-face)
+    - [Populate the database](#populate-the-database)
+      - [Remote content](#remote-content)
+      - [Local content](#local-content)
+      - [Generate embeddings](#generate-embeddings)
+    - [Start the backend of the web app](#start-the-backend-of-the-web-app)
+    - [Set up and start the frontend of the web app](#set-up-and-start-the-frontend-of-the-web-app)
+      - [Install npm dependencies](#install-npm-dependencies)
+      - [Start the frontend](#start-the-frontend)
+    - [Test the web app](#test-the-web-app)
+  - [Running _PolicyBot_ after implementation](#running-policybot-after-implementation)
 
 ## Introduction
 
@@ -82,10 +83,9 @@ You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/
 
 ## Initial implementation
 
-GETTING STARTED
+These are the steps required to get _PolicyBot_ installed, configured, and working for the first time. With the exception of populating the database they are steps that only need to be performed once.
 
-
-## Clone the project
+### Clone the project
 
 Clone the _PolicyBot_ project repository from GitHub:
 
@@ -106,7 +106,7 @@ The rest of the set up should be performed from the root of the project:
 cd policybot
 ```
 
-## Set up PostgreSQL database in Docker
+### Set up PostgreSQL database in Docker
 
 Run PostgreSQL in a Docker container:
 
@@ -129,7 +129,7 @@ CONTAINER ID   IMAGE                          COMMAND                  CREATED  
 
 The STATUS of the container should be something like "Up 42 seconds".
 
-## Set up Python virtual environment and dependencies
+### Set up Python virtual environment and dependencies
 
 Create and activate a virtual environment for PolicyBot (this uses conda but other virtual environments like venv could be used):
 
@@ -151,7 +151,7 @@ Install Python dependencies:
 pip install -r requirements.txt
 ```
 
-## Add a model deployment in Azure OpenAI service
+### Add a model deployment in Azure OpenAI service
 
 Go to [Azure OpenAI](https://ai.azure.com/) service.
 
@@ -159,13 +159,13 @@ Navigate to `Shared resources > Deployments` and deploy a model suitable for cha
 
 You will need details from the model deployment later.
 
-## Configure environment variables
+### Configure environment variables
 
 Copy the file `.env.sample` into `.env`.
 
 As the `.env` file will hold secrets such as API keys it is gitignored.
 
-### PostgreSQL
+#### PostgreSQL
 
 The environment variables relating to the PostgeSQL database can be left with their default values:
 
@@ -182,7 +182,7 @@ If the database name, username or password were changed when the database was de
 
 If the PostgreSQL database is installed on a remote host then `POSTGRES_HOST` should be changed to reflect the IP address or URL as appropriate.
 
-### Azure OpenAI
+#### Azure OpenAI
 
 The environment variables relating to Azure OpenAI and the chat model deployment need to be set:
 
@@ -193,7 +193,7 @@ AZURE_OPENAI_CHAT_MODEL=gpt-4.1 # for example
 AZURE_OPENAI_CHAT_MODEL_VERSION=2024-12-01-preview # for example
 ```
 
-### Hugging Face
+#### Hugging Face
 
 An access token is needed to access the `thenlper/gte-large` embedding model.
 
@@ -205,7 +205,7 @@ Set the `HF_TOKEN` environment variable:
 HF_TOKEN=<your Hugging Face access token>
 ```
 
-## Populate the database
+### Populate the database
 
 The database needs to be populated with content for _PolicyBot_ to use. This can be:
 
@@ -214,7 +214,7 @@ The database needs to be populated with content for _PolicyBot_ to use. This can
 
 It is not essential to populate the database with both types of content. Additional content can be added to the database at any point. As _PolicyBot_ is a RAG-based chatbot how well it performs is related to the information it is able to reference for its responses.
 
-### Remote content
+#### Remote content
 
 Run this script to scrape content from the LSE website:
 
@@ -228,7 +228,7 @@ The script will take a considerable amount of time to complete when it is first 
 
 Note that it is safe to interupt and restart the script.
 
-### Local content
+#### Local content
 
 Create or identify a local directory for storing PDF documents to ingest to the database. This can be any accessible directory including, for example, a locally synchronised folder from OneDrive.
 
@@ -249,7 +249,7 @@ The script can be run multiple times as it will only process documents that have
 
 Note that it is safe to interupt and restart the script.
 
-### Generate embeddings
+#### Generate embeddings
 
 Define the required embedding type environment variable in the `.env file: 
 
@@ -289,7 +289,7 @@ The script will take a considerable amount of time to complete when it is first 
 
 Note that it is safe to interupt and restart the script.
 
-## Start the backend of the web app
+### Start the backend of the web app
 
 The backend of the web app provides an API that handles requests from the frontend. It needs to be running before the frontend can be started.
 
@@ -324,9 +324,9 @@ INFO:ragapp:Embed Model Selected: model_name='thenlper/gte-large' embed_batch_si
 INFO:     Application startup complete.
 ```
 
-## Set up and start the frontend of the web app
+### Set up and start the frontend of the web app
 
-### Install npm dependencies
+#### Install npm dependencies
 
 Open a new Terminal/CLI session and run the following:
 
@@ -354,7 +354,7 @@ Run `npm audit` for details.
 
 Depending on the number and nature of the vulnerabilities reported you can fix these now or later, using the commands indicated.
 
-### Start the frontend
+#### Start the frontend
 
 Run the following:
 
@@ -378,10 +378,39 @@ You should see something like:
   ➜  press h + enter to show help
 ```
 
-## Test the web app
+### Test the web app
 
 Using a web browser open the following URL:
 
 `http://localhost:5173/`
 
+You should see the _PolicyBot_ user interface:
 
+![PolicyBot web app UI](/img/policybot_UI.png "PolicyBot web app UI")
+
+Test _PolicyBot_ by asking a question!
+
+## Running _PolicyBot_ after implementation
+
+Assuming you will be starting and stopping _PolicyBot_ on a regular basis this is the procedure to follow:
+
+- Start the PostgreSQL database in Docker.
+- Start the backend in one Terminal/CLI session: `cd ~policybot; sh scripts/start_backend.sh` (remember to activate the policybot conda environment).
+- Start the frontend in another Terminal/CLI session: `cd ~policybot; sh scripts/start_frontend.sh` (remember to activate the policybot conda environment).
+- Open `http://localhost:5173/` in a web browser.
+
+The session where the backend is running will show a stream of information about what the application is doing. Additionally the application writes logfiles in `~/policybot/logs` with date-based filenames for example `app_log_2025-12-14.log`.
+
+As multiple Terminal/CLI sessions are required a script is provided to make the process simpler. The script is specifically for use on MacOS and does require a symbolic link to the code directory to exist in your home directory.
+
+This is the procedure to follow for running _PolicyBot_ using the script:
+
+- Start the PostgreSQL database in Docker.
+- Open a Terminal/CLI session.
+- Run `sh ~/policybot/scripts/run_app.sh`.
+
+Separate Terminal windows will be opened, running the backend and frontend components of the web app, and tailing the log file. The URL will be opened in a Safari session. It will look something like this:
+
+![PolicyBot running](/img/multi_windows.png "PolicyBot running")
+
+The script dynamically sizes and positions the windows based on the size of the Mac display, so it will run equally well on for example a 24" iMac and a 13" MacBook 
