@@ -226,7 +226,7 @@ The script runs one or more crawlers defined in the `spiders` directory of the p
 
 The script will take a considerable amount of time to complete when it is first run. Subsequent runs will be quicker as it will only process files or documents that have changed compared to the versions in the database.
 
-Note that it is safe to interupt and restart the script.
+Note that it is safe to interrupt and restart the script.
 
 #### Local content
 
@@ -247,7 +247,7 @@ sh scripts/ingest_pdfs.sh
 
 The script can be run multiple times as it will only process documents that have changed compared to the versions in the database.
 
-Note that it is safe to interupt and restart the script.
+Note that it is safe to interrupt and restart the script.
 
 #### Generate embeddings
 
@@ -287,7 +287,7 @@ INFO:ragapp:Embedding chunks...
 
 The script will take a considerable amount of time to complete when it is first run. Subsequent runs will be quicker as it will only generate embeddings for files or documents that have changed compared to the versions in the database.
 
-Note that it is safe to interupt and restart the script.
+Note that it is safe to intersrupt and restart the script.
 
 ### Start the backend of the web app
 
