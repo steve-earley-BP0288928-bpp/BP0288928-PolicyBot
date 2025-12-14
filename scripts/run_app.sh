@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Script assumes a symbolic link to the PolicyBot code directory exists in your home directory
+
 # Get current date for log file
 LOG_DATE=$(date +"%Y-%m-%d")
 
@@ -45,8 +47,8 @@ tell application "iTerm"
 
     tell current session of newWindow1
         write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
-        write text "conda activate chat-lse"
-        write text "cd /Users/steve/chat-lse"
+        write text "conda activate policybot"
+        write text "cd ~/policybot"
         write text "sh scripts/start_backend.sh"
     end tell
 
@@ -59,8 +61,8 @@ tell application "iTerm"
 
     tell current session of newWindow2
         write text "PATH=/opt/anaconda3/bin:/opt/anaconda3/condabin:$PATH"
-        write text "conda activate chat-lse"
-        write text "cd /Users/steve/chat-lse"
+        write text "conda activate policybot"
+        write text "cd ~/policybot"
         write text "sh scripts/start_frontend.sh"
     end tell
     
@@ -83,13 +85,13 @@ tell application "iTerm"
     end tell
 
     tell current session of newWindow3
-        write text "cd /Users/steve/chat-lse/logs"
+        write text "cd ~/policybot/logs"
         write text "tail -f app_log_$LOG_DATE.log"
     end tell
 end tell
 EOF
 
-# AppleScript to open Safari with the chat-lse interface
+# AppleScript to open Safari with the policybot interface
 osascript <<EOF
 tell application "Safari"
     activate
