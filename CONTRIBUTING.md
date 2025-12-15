@@ -384,7 +384,7 @@ Using a web browser open the following URL:
 
 You should see the PolicyBot user interface:
 
-![PolicyBot web app UI](/img/policybot_UI.png "PolicyBot web app UI")
+![PolicyBot web app UI](/img/policybot_ui.png "PolicyBot web app UI")
 
 Test PolicyBot by asking a question!
 

@@ -77,7 +77,7 @@ PolicyBot is implemented in a hybrid architecture with the main web application 
 
 An abstracted view of the overall system is shown in this C4 container diagram:
 
-![PolicyBot system container diagram](/img/PolicyBot_Container_AsIs.png "PolicyBot system container diagram")
+![PolicyBot system container diagram](/img/policybot_container_asis.png "PolicyBot system container diagram")
 
 #### LLM prompts
 
@@ -225,24 +225,36 @@ There are three embedding types supported by the PolicyBot application:
 
 With the **Simple** type each document chunk is embedded without any additional context.
 
-With the **Title** type each document chunk is combined with the title of the document and the resulting text is embedded, providing som additional context.
+With the **Title** type each document chunk is combined with the title of the document and the resulting text is embedded, providing some additional context.
 
-With the **Context** type
-
-
+With the **Context** type each document chunk is combined with the title of the document and also combined with a summary of the whole document, and the resulting text is embedded, providing greater context. Note that to generate the summary of the document this embedding type uses the Azure OpenAI service.
 
 Embeddings can be generated for one or more of the embedding types and the PolicyBot application can be directed to use a specific type of embedding by setting an environment variable.
 
-
-Te process is executed on demand by the script `scripts/embed_db.sh`. It uses `scripts/embed_db.py` and `src/python/chatlse/embeddings.py`.
+The process is executed on demand by the script `scripts/embed_db.sh`. It uses `scripts/embed_db.py` and `src/python/chatlse/embeddings.py`.
 
 #### Data storage
-include the database diagram?
 
-![e](/img/policybot_database.png "E")
+The document chunks and embeddings are written to the PostgreSQL database. This uses a simple data archiecture as shown in this diagram:
+
+![PolicyBot database structure](/img/policybot_database.png "PolicyBot database structure")
+
+The `lse_doc` table stores the documents split into one or more document chunks, where each chunk is identified by a sequential `chunk_id` related to a `doc_id` generated from a hash of the whole document. The text of the chunk is stored in the `content` column. Three columns are used to store the respective embeddings.
+
+The `doc_summary` table is only populated if the Context embedding type is used. The table stores the text of the document in the `content` column and the LLM-generated summary of the document in the `summary` column. There is an implied relationship between the two tables.
 
 ### Example use
 
-![e](/img/policybot_example_chat.png "Chat")
-![e](/img/policybot_example_thought.png "Thought")
-![e](/img/policybot_example_support.png "Support")
+Simple examples of PolicyBot in use.
+
+The first image shows a typical question and response interaction. The first question asked by the user has been answered by PolicyBot with reference to two LSE documents with the relevant sources indicated in the response.
+
+![PolicyBot chat](/img/policybot_example_chat.png "PolicyBot Chat")
+
+In the second image the lightbulb icon (💡) has been clicked to reveal the thought process applied by PolciyBot. This shows that the application used the RAG functionality to answer the question and provides details of the database search results and the prompt passed to the OpenAI service.
+
+![PolicyBot Thought](/img/policybot_example_thought.png "PolicyBot Thought")
+
+In the third image the clipboard icon (📋) has been clicked to reveal the document chunks used as supporting content for the response.
+
+![PolicyBot Support](/img/policybot_example_support.png "PolicyBot Support")
