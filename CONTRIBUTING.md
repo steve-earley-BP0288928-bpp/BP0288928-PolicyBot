@@ -77,7 +77,7 @@ The following software needs to be installed on your development machine before 
 
 These instructions assume MacOS is being used.
 
-You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be confifured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
+You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/purchase-options/azure-account) with access to the Azure OpenAI service. A private endpoint and firewall rules should be configured to allow secure connections from your development machine. All of this will need to be set up using the [Azure Portal](https://portal.azure.com/). Detailed instructions are outside the scope of this document.
 
 ## Initial implementation
 
@@ -234,7 +234,7 @@ Set the `OFFLINE_PDFS_DIR` environment variable with the path to the directory:
 
 ```bash
 # Local directory holding copies of PDF documents to ingest
-OFFLINE_PDFS_DIR='
+OFFLINE_PDFS_DIR=''
 ```
 
 Run this script to ingest the PDFs:
@@ -249,7 +249,7 @@ Note that it is safe to interrupt and restart the script.
 
 #### Generate embeddings
 
-Define the required embedding type environment variable in the `.env file: 
+Define the required embedding type environment variable in the `.env` file: 
 
 ```bash
 # Select embedding type from ["simple_embeddings", "title_embeddings", "context_embeddings"]
@@ -285,7 +285,7 @@ INFO:ragapp:Embedding chunks...
 
 The script will take a considerable amount of time to complete when it is first run. Subsequent runs will be quicker as it will only generate embeddings for files or documents that have changed compared to the versions in the database.
 
-Note that it is safe to intersrupt and restart the script.
+Note that it is safe to interrupt and restart the script.
 
 ### Start the backend of the web app
 
@@ -334,7 +334,7 @@ cd frontend
 npm install
 ```
 
-You might something like the following warning:
+You might see something like the following warning:
 
 ```bash
 added 264 packages, and audited 265 packages in 16s
@@ -357,7 +357,7 @@ Depending on the number and nature of the vulnerabilities reported you can fix t
 Run the following:
 
 ```bash
-# Go to chat-lse/frontend
+# go to ~policybot/frontend
 $ cd frontend 
 $ npm run dev
 ```
@@ -411,4 +411,4 @@ Separate Terminal windows will be opened, running the backend and frontend compo
 
 ![PolicyBot running](/img/policybot_multi_windows.png "PolicyBot running")
 
-The script dynamically sizes and positions the windows based on the size of the Mac display, so it will run equally well on for example a 24" iMac and a 13" MacBook 
+The script dynamically sizes and positions the windows based on the size of the Mac display, so it will run equally well on, for example, a 24" iMac and a 13" MacBook.

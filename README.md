@@ -21,7 +21,7 @@
       - [Retrieval](#retrieval)
       - [LLM](#llm)
     - [Data ingestion and embeddings](#data-ingestion-and-embeddings)
-      - [Data acquistion](#data-acquistion)
+      - [Data acquisition](#data-acquisition)
         - [Files and documents on LSE website](#files-and-documents-on-lse-website)
         - [Documents stored locally](#documents-stored-locally)
       - [Embeddings](#embeddings)
@@ -40,7 +40,7 @@ The research project and PolicyBot implementation was undertaken by [Steve Earle
 
 The research project was delivered as part of an MSc programme in Applied Data Analytics under a Digital and Technology Solutions Specialist Integrated Degree Apprenticeship run by [BPP University](https://www.bpp.com/).
 
-The project sought to understand the current experience of LSE administratitve staff in accessing and understanding published university information, particularly official policies and procedures. There were two research hypotheses:
+The project sought to understand the current experience of LSE administrative staff in accessing and understanding published university information, particularly official policies and procedures. There were two research hypotheses:
 
 - That it is hard for administrative staff to find and use policy information.
 - That an LLM-RAG chatbot grounded on LSE policy information would be beneficial to staff.
@@ -53,7 +53,7 @@ The qualitative research gave participants access to PolicyBot through supervise
 
 PolicyBot is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi) and coordinated and managed by [Jonathan Cardoso-Silva](https://github.com/jonjoncardoso). 
 
-Details of the ChatLSE project are provided in [ChatLSE README](/docs/ChatLSE_README.md) and [ChatLSE CONTRIBUTING](ChatLSE_CONTRIBUTING.md) including information about the original project team and contributers.
+Details of the ChatLSE project are provided in [ChatLSE README](/docs/ChatLSE_README.md) and [ChatLSE CONTRIBUTING](ChatLSE_CONTRIBUTING.md) including information about the original project team and contributors.
 
 My thanks to Jon and his team for enabling me to adapt their work for my own project.
 
@@ -65,7 +65,7 @@ Instructions on deploying and configuring PolicyBot are available [here](CONTRIB
 
 #### Hybrid architecture 
 
-ChatLSE was designed and implemented to use only open-source components and to "serve as a blueprint for a fully open-source RAG solution".
+ChatLSE was designed and implemented to use only open-source components and to "serve as a blueprint for a fully open-source RAG solution" ([ChatLSE README](/docs/ChatLSE_README.md)).
 
 ChatLSE was itself based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project. Modifications made included removing the requirement to use any Azure services and to remove dependencies on close-sourced OpenAI chat and embedding models. In ChatLSE the LLM component runs locally using [Ollama](https://ollama.com/).
 
@@ -113,11 +113,11 @@ Note that the process does not itself access the documents that require authenti
 
 #### Logging
 
-ChatLSE wrote logging information to a single logfile located at the project root.
+ChatLSE wrote logging information to a single log file located at the project root.
 
-For PolicyBot I added a `logs` directory and altered `fastapi_app/logger.py` to generate a separate logfile each day. This was to make the logs easier to review and to facilitate analysis of the logs recorded during the interactive evaluation sessions as part of the research project.
+For PolicyBot I added a `logs` directory and altered `fastapi_app/logger.py` to generate a separate log file each day. This was to make the logs easier to review and to facilitate analysis of the logs recorded during the interactive evaluation sessions as part of the research project.
 
-I also extend the information included in the logs, and added a scripted process (`scripts/parse_logs.sh` and `scripts/log_parser.py`) that parses the logs and produces a csv file in the `analysis` directory that can be further analysed in e.g. Excel or Tableau etc.
+I also extended the information included in the logs, and added a scripted process (`scripts/parse_logs.sh` and `scripts/log_parser.py`) that parses the logs and produces a csv file in the `analysis` directory that can be further analysed in e.g. Excel or Tableau etc.
 
 ## Overview of PolicyBot
 
@@ -195,13 +195,13 @@ This diagram is a schematic view of the process for populating the PostgreSQL da
 
 This processes for this are manually executed and can be adjusted and repeated as required to change the scope and range of information available through PolicyBot.
 
-#### Data acquistion
+#### Data acquisition
 
 This part populates the database used by PolicyBot with information (HTML files and PDF documents) scraped from the LSE website, or with copies of PDF documents stored locally, or a combination of the two.
 
 ##### Files and documents on LSE website
 
-This process uses [Crawley](https://github.com/elixir-crawly/crawly) to scrape the LSE website for publicy available HTML files and documents (limited for practical purposes to PDFs) using conditions and URL starting points defined in `crawler/spiders`.
+This process uses [Crawley](https://github.com/elixir-crawly/crawly) to scrape the LSE website for publicly available HTML files and documents (limited for practical purposes to PDFs) using conditions and URL starting points defined in `crawler/spiders`.
 
 The scraped files and documents are converted to plain text, split into overlapping chunks, and stored in the PostgreSQL database.
 
@@ -251,7 +251,7 @@ The first image shows a typical question and response interaction. The first que
 
 ![PolicyBot chat](/img/policybot_example_chat.png "PolicyBot Chat")
 
-In the second image the lightbulb icon (💡) has been clicked to reveal the thought process applied by PolciyBot. This shows that the application used the RAG functionality to answer the question and provides details of the database search results and the prompt passed to the OpenAI service.
+In the second image the lightbulb icon (💡) has been clicked to reveal the 'thought process' applied by PolicyBot. This shows that the application used the RAG functionality to answer the question and provides details of the database search results and the prompt passed to the OpenAI service.
 
 ![PolicyBot Thought](/img/policybot_example_thought.png "PolicyBot Thought")
 
