@@ -49,7 +49,7 @@ The code has been fully tested on MacOS (Intel and M2) and partially tested on U
 
 The high-level architecture of the PolicyBot application is shown here:
 
-![High-level architecture of the PolicyBot application](/img/PolicyBot_simple_architecture.png "High-level architecture of the PolicyBot application")
+![High-level architecture of the PolicyBot application](/img/policybot_simple_architecture.png "High-level architecture of the PolicyBot application")
 
 There are four main components:
 
@@ -409,6 +409,6 @@ This is the procedure to follow for running PolicyBot using the script:
 
 Separate Terminal windows will be opened, running the backend and frontend components of the web app, and tailing the log file. The URL will be opened in a Safari session. It will look something like this:
 
-![PolicyBot running](/img/multi_windows.png "PolicyBot running")
+![PolicyBot running](/img/policybot_multi_windows.png "PolicyBot running")
 
 The script dynamically sizes and positions the windows based on the size of the Mac display, so it will run equally well on for example a 24" iMac and a 13" MacBook 
