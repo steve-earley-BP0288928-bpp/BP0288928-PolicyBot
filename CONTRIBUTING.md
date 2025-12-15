@@ -1,11 +1,9 @@
-# Contributing to _PolicyBot_
+# Contributing to PolicyBot
 
 Adapted and updated from the original [ChatLSE CONTRIBUTING](/docs/ChatLSE_CONTRIBUTING.md) document.
 
-
-## Table of contents
-- [Contributing to _PolicyBot_](#contributing-to-policybot)
-  - [Table of contents](#table-of-contents)
+**Table of contents**
+- [Contributing to PolicyBot](#contributing-to-policybot)
   - [Introduction](#introduction)
   - [Architecture and structure](#architecture-and-structure)
   - [Requirements](#requirements)
@@ -27,11 +25,11 @@ Adapted and updated from the original [ChatLSE CONTRIBUTING](/docs/ChatLSE_CONTR
       - [Install npm dependencies](#install-npm-dependencies)
       - [Start the frontend](#start-the-frontend)
     - [Test the web app](#test-the-web-app)
-  - [Running _PolicyBot_ after implementation](#running-policybot-after-implementation)
+  - [Running PolicyBot after implementation](#running-policybot-after-implementation)
 
 ## Introduction
 
-The _PolicyBot_ project is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi), which itself was based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project.
+The PolicyBot project is based on a fork of the [ChatLSE](https://github.com/LSE-DSI/chat-lse) project developed by the [LSE Data Science Institute](https://www.lse.ac.uk/dsi), which itself was based on the [Rag on Postgres](https://github.com/pamelafox/rag-on-postgres) project.
 
 Major modifications made:
 
@@ -41,7 +39,7 @@ Major modifications made:
 
 Minor modifications made:
 
-- Altered user interface to reflect the specific purpose of _PolicyBot_.
+- Altered user interface to reflect the specific purpose of PolicyBot.
 - Altered logging approach to create date-based logs with additional information logged.
 - Resolved a TypeError issue in the main chat function.
 
@@ -49,13 +47,13 @@ The code has been fully tested on MacOS (Intel and M2) and partially tested on U
 
 ## Architecture and structure
 
-The high-level architecture of the _PolicyBot_ application is shown here:
+The high-level architecture of the PolicyBot application is shown here:
 
 ![High-level architecture of the PolicyBot application](/img/PolicyBot_simple_architecture.png "High-level architecture of the PolicyBot application")
 
 There are four main components:
 
-- The frontend of the _PolicyBot_ web app, built using [ReactJS](https://react.dev/) and [FluentUI](https://github.com/microsoft/fluentui).
+- The frontend of the PolicyBot web app, built using [ReactJS](https://react.dev/) and [FluentUI](https://github.com/microsoft/fluentui).
 - The backend of the web app, built using [FastAPI](https://fastapi.tiangolo.com/) and Python.
 - A [PostgreSQL](https://www.postgresql.org/) database, deployed locally using [Docker](https://www.docker.com/).
 - A chat model, deployed remotely using [Azure OpenAI](https://ai.azure.com/) service.
@@ -83,11 +81,11 @@ You will need an [Azure subscription](https://azure.microsoft.com/en-gb/pricing/
 
 ## Initial implementation
 
-These are the steps required to get _PolicyBot_ installed, configured, and working for the first time. With the exception of populating the database they are steps that only need to be performed once.
+These are the steps required to get PolicyBot installed, configured, and working for the first time. With the exception of populating the database they are steps that only need to be performed once.
 
 ### Clone the project
 
-Clone the _PolicyBot_ project repository from GitHub:
+Clone the PolicyBot project repository from GitHub:
 
 ```bash
 $ git clone https://github.com/steve-earley-BP0288928-bpp/BP0288928-PolicyBot.git
@@ -131,14 +129,14 @@ The STATUS of the container should be something like "Up 42 seconds".
 
 ### Set up Python virtual environment and dependencies
 
-Create and activate a virtual environment for PolicyBot (this uses conda but other virtual environments like venv could be used):
+Create and activate a virtual environment for PolicyBot (this uses Conda but other virtual environments like venv could be used):
 
 ```bash
 conda create -n policybot python=3.11 ipython
 conda activate policybot
 ```
 
-**Important** - ensure that `pip` refers to the pip inside the conda environment just created:
+**Important** - ensure that `pip` refers to the pip inside the Conda environment just created:
 
 ```bash
 which pip
@@ -207,12 +205,12 @@ HF_TOKEN=<your Hugging Face access token>
 
 ### Populate the database
 
-The database needs to be populated with content for _PolicyBot_ to use. This can be:
+The database needs to be populated with content for PolicyBot to use. This can be:
 
 - Remote content - HTML files and PDF documents that are publicly available on the LSE website.
 - Local content - PDF documents that are held in local storage.
 
-It is not essential to populate the database with both types of content. Additional content can be added to the database at any point. As _PolicyBot_ is a RAG-based chatbot how well it performs is related to the information it is able to reference for its responses.
+It is not essential to populate the database with both types of content. Additional content can be added to the database at any point. As PolicyBot is a RAG-based chatbot how well it performs is related to the information it is able to reference for its responses.
 
 #### Remote content
 
@@ -384,26 +382,26 @@ Using a web browser open the following URL:
 
 `http://localhost:5173/`
 
-You should see the _PolicyBot_ user interface:
+You should see the PolicyBot user interface:
 
 ![PolicyBot web app UI](/img/policybot_UI.png "PolicyBot web app UI")
 
-Test _PolicyBot_ by asking a question!
+Test PolicyBot by asking a question!
 
-## Running _PolicyBot_ after implementation
+## Running PolicyBot after implementation
 
-Assuming you will be starting and stopping _PolicyBot_ on a regular basis this is the procedure to follow:
+Assuming you will be starting and stopping PolicyBot on a regular basis this is the procedure to follow:
 
 - Start the PostgreSQL database in Docker.
-- Start the backend in one Terminal/CLI session: `cd ~policybot; sh scripts/start_backend.sh` (remember to activate the policybot conda environment).
-- Start the frontend in another Terminal/CLI session: `cd ~policybot; sh scripts/start_frontend.sh` (remember to activate the policybot conda environment).
+- Start the backend in one Terminal/CLI session: `cd ~policybot; sh scripts/start_backend.sh` (remember to activate the `policybot` Conda environment).
+- Start the frontend in another Terminal/CLI session: `cd ~policybot; sh scripts/start_frontend.sh` (remember to activate the `policybot` Conda environment).
 - Open `http://localhost:5173/` in a web browser.
 
 The session where the backend is running will show a stream of information about what the application is doing. Additionally the application writes logfiles in `~/policybot/logs` with date-based filenames for example `app_log_2025-12-14.log`.
 
 As multiple Terminal/CLI sessions are required a script is provided to make the process simpler. The script is specifically for use on MacOS and does require a symbolic link to the code directory to exist in your home directory.
 
-This is the procedure to follow for running _PolicyBot_ using the script:
+This is the procedure to follow for running PolicyBot using the script:
 
 - Start the PostgreSQL database in Docker.
 - Open a Terminal/CLI session.
