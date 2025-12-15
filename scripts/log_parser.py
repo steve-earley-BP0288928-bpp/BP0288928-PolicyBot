@@ -307,7 +307,7 @@ def main():
 
     # Process files in specific directory
     parser.process_directory_to_csv(
-        '/Users/steve/chat-lse/logs', '/Users/steve/chat-lse/analysis/output.csv')
+        'logs', 'analysis/output.csv')
 
 
 if __name__ == "__main__":
