@@ -256,7 +256,7 @@ Define the required embedding type environment variable in the `.env file:
 EMBEDDING_TYPE=title_embeddings
 ```
 
-The default setting is `title_embeddings` as the original _ChatLSE_ project found through experimentation that this embedding type provides the best results.
+The default setting is `title_embeddings` as the original ChatLSE project found through experimentation that this embedding type provides the best results.
 
 Note that whilst the `simple_embeddings` and `title_embeddings` embedding types use the local embedding model, the `context_embeddings` embedding type additionally uses the remote chat model to summarise documents. This increases the time taken to generate embeddings and potentially incurs a considerable cost given the high token usage required.
 
