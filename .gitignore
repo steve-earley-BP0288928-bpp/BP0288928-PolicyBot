@@ -295,6 +295,7 @@ dist
 
 ##### CUSTOM #####
 
+analysis/
 data/
 logs/
 static/
